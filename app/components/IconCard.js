@@ -1,13 +1,21 @@
 import React from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  TouchableWithoutFeedback,
+} from "react-native";
 import AppText from "./Text";
 
 function IconCard({ text, image }) {
   return (
-    <View style={styles.container}>
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      <AppText style={styles.text}>{text}</AppText>
-    </View>
+    <TouchableWithoutFeedback onPress={() => console.log("hola")}>
+      <View style={styles.container}>
+        {image && <Image source={{ uri: image }} style={styles.image} />}
+        <AppText style={styles.text}>{text}</AppText>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 
