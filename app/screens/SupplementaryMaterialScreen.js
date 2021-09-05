@@ -35,6 +35,9 @@ function SupplementaryMaterialScreen({ route, navigation }) {
           />
         </>
       )}
+      <View style={styles.text_container}>
+        <AppText style={styles.title}>{topic.name}</AppText>
+      </View>
       <FlatList
         data={getMaterialsApi.data}
         keyExtractor={(material) => material.id.toString()}
@@ -51,7 +54,15 @@ function SupplementaryMaterialScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  text_container: {
+    marginTop: 10,
+    alignItems: "center",
+  },
+  title: {
+    fontWeight: "800",
+    fontSize: 20,
+    marginBottom: 20,
+  },
 });
 
 export default SupplementaryMaterialScreen;

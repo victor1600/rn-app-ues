@@ -17,11 +17,16 @@ const QuizNavigator = () => (
     screenOptions={{
       headerTintColor: colors.white,
       headerStyle: { backgroundColor: colors.primary },
+      headerBackTitle: "",
     }}
   >
     <Stack.Screen name="Courses" component={CoursesScreen} />
     <Stack.Screen name="Topics" component={TopicsScreen} />
-    <Stack.Screen name="Topics_SubMenu" component={SubMenuTopicsScreen} />
+    <Stack.Screen
+      name="Topics_SubMenu"
+      component={SubMenuTopicsScreen}
+      options={{ title: "" }}
+    />
     <Stack.Screen
       name="Supplementary"
       component={SupplementaryMaterialScreen}
