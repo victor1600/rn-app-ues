@@ -2,15 +2,16 @@ import React from "react";
 import {
   View,
   StyleSheet,
-  Text,
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import AppText from "./Text";
 
-function IconCard({ text, image }) {
+import AppText from "./Text";
+import colors from "../config/colors";
+
+function IconCard({ text, image, onPress }) {
   return (
-    <TouchableWithoutFeedback onPress={() => console.log("hola")}>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
         {image && <Image source={{ uri: image }} style={styles.image} />}
         <AppText style={styles.text}>{text}</AppText>
@@ -21,7 +22,7 @@ function IconCard({ text, image }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#ffff",
+    backgroundColor: colors.white,
     width: 180,
     height: 130,
     justifyContent: "center",

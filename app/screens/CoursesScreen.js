@@ -7,7 +7,9 @@ import coursesApi from "../api/courses";
 import AppText from "../components/Text";
 import ActivityIndicator from "../components/ActivityIndicator";
 
-function CoursesScreen(props) {
+import routes from "../navigation/routes";
+
+function CoursesScreen({ navigation }) {
   const getCoursesApi = useApi(coursesApi.getCourses);
 
   useEffect(() => {
@@ -28,8 +30,13 @@ function CoursesScreen(props) {
           numColumns={2}
           keyExtractor={(course) => course.id.toString()}
           renderItem={({ item }) => (
-            <IconCard text={item.name} image={item.icon} />
+            <IconCard
+              text={item.name}
+              image={item.icon}
+              onPress={() => navigation.navigate(routes.TOPICS, item)}
+            />
           )}
+          ListEmptyComponent={() => <AppText>No courses found</AppText>}
         />
       </Screen>
     </>
