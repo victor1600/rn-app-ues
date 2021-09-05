@@ -8,13 +8,17 @@ import {
 
 import AppText from "./Text";
 import colors from "../config/colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function IconCard({ text, image, onPress }) {
+function IconCard({ text, image, icon, onPress, textStyle }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        {image && <Image source={{ uri: image }} style={styles.image} />}
-        <AppText style={styles.text}>{text}</AppText>
+        {/* <View style={styles.imageContainer}> */}
+        {image && <Image source={image} style={styles.image} />}
+        {/* </View> */}
+        {icon && <MaterialCommunityIcons name={icon} color="red" size={40} />}
+        <AppText style={[textStyle, styles.text]}>{text}</AppText>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -23,21 +27,27 @@ function IconCard({ text, image, onPress }) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.white,
-    width: 180,
-    height: 130,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 16,
-    marginTop: 30,
     borderRadius: 10,
+    overflow: "hidden",
+    marginHorizontal: 40,
+    marginBottom: 10,
+    marginTop: 10,
+    paddingBottom: 15,
   },
   image: {
-    width: 80,
-    height: 80,
-    marginBottom: 5,
+    width: "100%",
+    height: 200,
+    marginBottom: 10,
+    // paddingBottom: 50,
   },
+  // imageContainer: {
+  //   width: "100%",
+  // },
   text: {
-    fontWeight: "500",
+    fontWeight: "600",
+    fontSize: 20,
   },
 });
 

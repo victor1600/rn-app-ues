@@ -17,8 +17,6 @@ function TopicsScreen({ title = "Topics", route }) {
   useEffect(() => {
     getTopicsApi.request(course.id);
   }, []);
-  console.log(getTopicsApi.data);
-  console.log(getTopicsApi.request);
   return (
     <Screen>
       <ActivityIndicator visible={getTopicsApi.loading} />

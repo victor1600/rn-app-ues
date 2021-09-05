@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Text, FlatList, Button } from "react-native";
+import { StyleSheet, FlatList, Button } from "react-native";
 import IconCard from "../components/IconCard";
 import Screen from "./Screen";
 import useApi from "../hooks/useApi";
@@ -27,12 +27,12 @@ function CoursesScreen({ navigation }) {
         )}
         <FlatList
           data={getCoursesApi.data}
-          numColumns={2}
+          // numColumns={2}
           keyExtractor={(course) => course.id.toString()}
           renderItem={({ item }) => (
             <IconCard
               text={item.name}
-              image={item.icon}
+              image={{ uri: item.icon }}
               onPress={() => navigation.navigate(routes.TOPICS, item)}
             />
           )}
