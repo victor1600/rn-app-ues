@@ -5,17 +5,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppText from "../Text";
 import colors from "../../config/colors";
 
-function ListItem({ text }) {
+function ListItem({ icon, text, onPress }) {
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
         <AppText style={{ flex: 1 }}>{text}</AppText>
 
-        <MaterialCommunityIcons
-          color={colors.primary}
-          name="chevron-right"
-          size={25}
-        />
+        <MaterialCommunityIcons color={colors.primary} name={icon} size={25} />
       </View>
     </TouchableWithoutFeedback>
   );

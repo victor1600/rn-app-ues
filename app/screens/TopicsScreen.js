@@ -8,8 +8,9 @@ import ListItemSeparator from "../components/lists/ListItemSeparator";
 import Screen from "./Screen";
 import topicsApi from "../api/topics";
 import useApi from "../hooks/useApi";
+import routes from "../navigation/routes";
 
-function TopicsScreen({ title = "Topics", route }) {
+function TopicsScreen({ title = "Topics", route, navigation }) {
   const course = route.params;
 
   const getTopicsApi = useApi(topicsApi.getTopics);
@@ -36,7 +37,13 @@ function TopicsScreen({ title = "Topics", route }) {
         data={getTopicsApi.data}
         keyExtractor={(topic) => topic.id.toString()}
         ItemSeparatorComponent={ListItemSeparator}
-        renderItem={({ item }) => <ListItem text={item.name} />}
+        renderItem={({ item }) => (
+          <ListItem
+            text={item.name}
+            icon="chevron-right"
+            onPress={() => navigation.navigate(routes.TOPICS_SUBMENU, item)}
+          />
+        )}
         ListEmptyComponent={() => (
           <AppText>No topics found for {course.name}</AppText>
         )}

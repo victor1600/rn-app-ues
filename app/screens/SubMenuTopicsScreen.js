@@ -1,30 +1,41 @@
 import React from "react";
-import { View, StyleSheet, FlatList } from "react-native";
-
+import { StyleSheet, FlatList, TouchableWithoutFeedback } from "react-native";
 import IconCard from "../components/IconCard";
+import ListItemSeparator from "../components/lists/ListItemSeparator";
+import routes from "../navigation/routes";
 import Screen from "./Screen";
 
 const options = [
-  { id: "1", image: require("../assets/books.png"), text: "hola" },
-  { id: "2", image: require("../assets/books.png"), text: "bye bye" },
+  {
+    id: 1,
+    text: "Material de estudio",
+    image: require("../assets/books.jpg"),
+    route: routes.SUPPLEMENTARY,
+  },
+  {
+    id: 2,
+    text: "Preguntas",
+    image: require("../assets/exam.jpg"),
+    route: routes.QUIZ,
+  },
 ];
 
-function SubMenuTopicsScreen(props) {
+function SubMenuTopicsScreen({ navigation, route }) {
+  const topic = route.params;
   return (
     <Screen>
-      <View style={styles.container}>
-        <FlatList
-          data={options}
-          keyExtractor={(option) => option.id}
-          renderItem={({ item }) => (
-            <IconCard
-              text={item.text}
-              image={item.image}
-              textStyle={{ fontSize: 22 }}
-            />
-          )}
-        />
-      </View>
+      <FlatList
+        data={options}
+        keyExtractor={(option) => option.id.toString()}
+        renderItem={({ item }) => (
+          <IconCard
+            text={item.text}
+            image={item.image}
+            onPress={() => navigation.navigate(item.route, topic)}
+          />
+        )}
+        ItemSeparatorComponent={ListItemSeparator}
+      />
     </Screen>
   );
 }
