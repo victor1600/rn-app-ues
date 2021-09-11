@@ -20,8 +20,16 @@ const QuizNavigator = () => (
       headerBackTitle: "",
     }}
   >
-    <Stack.Screen name="Courses" component={CoursesScreen} />
-    <Stack.Screen name="Topics" component={TopicsScreen} />
+    <Stack.Screen
+      name="Courses"
+      component={CoursesScreen}
+      options={{ title: "Materias" }}
+    />
+    <Stack.Screen
+      name="Topics"
+      component={TopicsScreen}
+      options={{ title: "Temas" }}
+    />
     <Stack.Screen
       name="Topics_SubMenu"
       component={SubMenuTopicsScreen}
@@ -30,6 +38,7 @@ const QuizNavigator = () => (
     <Stack.Screen
       name="Supplementary"
       component={SupplementaryMaterialScreen}
+      options={{ title: "Material de apoyo" }}
     />
     <Stack.Screen name="Quiz" component={QuizScreen} />
   </Stack.Navigator>
