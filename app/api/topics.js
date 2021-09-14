@@ -1,8 +1,8 @@
 import client from "./client";
 
-const endpoint = "/topics";
+const endpoint = "/api/topics/";
 
-const getTopics = (courseId) => client.get(`${endpoint}/?course=${courseId}`);
+const getTopics = (courseId) => client.get(`${endpoint}?course=${courseId}`);
 
 export default {
   getTopics,

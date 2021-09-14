@@ -27,6 +27,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Aplicacion de estudio para examen de admision UES.",
+    "githubUrl": "https://github.com/victor1600/rn-app-ues"
   }
 }
