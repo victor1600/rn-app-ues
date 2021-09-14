@@ -9,11 +9,13 @@ import Screen from "./Screen";
 import topicsApi from "../api/topics";
 import useApi from "../hooks/useApi";
 import routes from "../navigation/routes";
+import useRefresh from "../hooks/useRefresh";
 
 function TopicsScreen({ title = "Topics", route, navigation }) {
   const course = route.params;
 
   const getTopicsApi = useApi(topicsApi.getTopics);
+  const refresh = useRefresh(getTopicsApi, course.id);
 
   useEffect(() => {
     getTopicsApi.request(course.id);
@@ -37,6 +39,8 @@ function TopicsScreen({ title = "Topics", route, navigation }) {
         data={getTopicsApi.data}
         keyExtractor={(topic) => topic.id.toString()}
         ItemSeparatorComponent={ListItemSeparator}
+        onRefresh={refresh.onRefresh}
+        refreshing={refresh.refreshing}
         renderItem={({ item }) => (
           <ListItem
             text={item.name}

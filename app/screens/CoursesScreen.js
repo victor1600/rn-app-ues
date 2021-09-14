@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList, Button } from "react-native";
 import IconCard from "../components/IconCard";
 import Screen from "./Screen";
 import useApi from "../hooks/useApi";
+import useRefresh from "../hooks/useRefresh";
 import coursesApi from "../api/courses";
 import AppText from "../components/Text";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -11,6 +12,7 @@ import routes from "../navigation/routes";
 
 function CoursesScreen({ navigation }) {
   const getCoursesApi = useApi(coursesApi.getCourses);
+  const refresh = useRefresh(getCoursesApi);
 
   useEffect(() => {
     getCoursesApi.request();
@@ -27,8 +29,9 @@ function CoursesScreen({ navigation }) {
         )}
         <FlatList
           data={getCoursesApi.data}
-          // numColumns={2}
           keyExtractor={(course) => course.id.toString()}
+          onRefresh={refresh.onRefresh}
+          refreshing={refresh.refreshing}
           renderItem={({ item }) => (
             <IconCard
               text={item.name}

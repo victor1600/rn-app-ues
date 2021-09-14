@@ -6,6 +6,7 @@ import AppText from "../components/Text";
 import ListItem from "../components/lists/ListItem";
 
 import useApi from "../hooks/useApi";
+import useRefresh from "../hooks/useRefresh";
 
 import Screen from "./Screen";
 import materials from "../api/materials";
@@ -16,12 +17,11 @@ const link =
 function SupplementaryMaterialScreen({ route, navigation }) {
   const topic = route.params;
   const getMaterialsApi = useApi(materials.getMaterials);
+  const refresh = useRefresh(getMaterialsApi, topic.id);
 
   useEffect(() => {
     getMaterialsApi.request(topic.id);
   }, []);
-
-  console.log(getMaterialsApi.data);
 
   return (
     <Screen>
@@ -41,12 +41,17 @@ function SupplementaryMaterialScreen({ route, navigation }) {
       <FlatList
         data={getMaterialsApi.data}
         keyExtractor={(material) => material.id.toString()}
+        onRefresh={refresh.onRefresh}
+        refreshing={refresh.refreshing}
         renderItem={({ item }) => (
           <ListItem
             icon="open-in-new"
             text={item.name}
             onPress={() => Linking.openURL(item.file)}
           />
+        )}
+        ListEmptyComponent={() => (
+          <AppText>No material found for {topic.name}</AppText>
         )}
       />
     </Screen>
