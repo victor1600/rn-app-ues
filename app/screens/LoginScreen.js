@@ -12,6 +12,7 @@ import Screen from "./Screen";
 import useAuth from "../auth/useAuth";
 import authApi from "../api/auth";
 import { useState } from "react";
+import colors from "../config/colors";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -32,52 +33,60 @@ function LoginScreen(props) {
   };
 
   return (
-    <Screen styles={styles.container}>
-      <Image style={styles.image} source={require("../assets/ues.png")} />
+    <Screen style={styles.container}>
+      <View style={styles.cardContainer}>
+        <Image style={styles.image} source={require("../assets/ues.png")} />
+        <Form
+          initialValues={{ email: "", password: "" }}
+          onSubmit={handleSubmit}
+          validationSchema={validationSchema}
+        >
+          <FormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon="email"
+            keyboardType="email-address"
+            name="email"
+            placeholder="Email"
+            textContentType="emailAddress"
+          />
+          <ErrorMessage
+            error="Invalid email and/or password."
+            visible={loginFailed}
+          />
 
-      <Form
-        initialValues={{ email: "", password: "" }}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      >
-        <FormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="email"
-          keyboardType="email-address"
-          name="email"
-          placeholder="Email"
-          textContentType="emailAddress"
-        />
-        <ErrorMessage
-          error="Invalid email and/or password."
-          visible={loginFailed}
-        />
-
-        <FormField
-          autoCapitalize="none"
-          autoCorrect={false}
-          icon="lock"
-          name="password"
-          placeholder="Password"
-          secureTextEntry
-          textContentType="password"
-        />
-        <SubmitButton title="Login" />
-      </Form>
+          <FormField
+            autoCapitalize="none"
+            autoCorrect={false}
+            icon="lock"
+            name="password"
+            placeholder="Password"
+            secureTextEntry
+            textContentType="password"
+          />
+          <SubmitButton title="Login" />
+        </Form>
+      </View>
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  cardContainer: {
+    backgroundColor: "white",
+    padding: 15,
+    marginHorizontal: 20,
+    paddingVertical: 30,
+    borderRadius: 10,
+  },
   container: {
-    padding: 10,
+    justifyContent: "center",
+    backgroundColor: colors.primary,
   },
   image: {
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     alignSelf: "center",
-    marginTop: 50,
     marginBottom: 20,
     resizeMode: "contain",
   },
