@@ -1,15 +1,14 @@
-import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
 import navigationTheme from "./app/navigation/navigationTheme";
 import QuizNavigator from "./app/navigation/QuizNavigator";
-import SubMenuTopicsScreen from "./app/screens/SubMenuTopicsScreen";
 import OfflineNotice from "./app/components/OfflineNotice";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 import { useState } from "react";
+
 export default function App() {
   const [user, setUser] = useState();
   const [isReady, setIsReady] = useState(false);
@@ -27,6 +26,7 @@ export default function App() {
         onError={console.warn}
       />
     );
+  // TODO: Expired jwt raises invalid signature error.
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
