@@ -7,7 +7,6 @@ import useRefresh from "../hooks/useRefresh";
 import coursesApi from "../api/courses";
 import AppText from "../components/Text";
 import ActivityIndicator from "../components/ActivityIndicator";
-import useAuth from "../auth/useAuth";
 import routes from "../navigation/routes";
 
 function CoursesScreen({ navigation }) {

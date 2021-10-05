@@ -22,6 +22,12 @@ apiClient.get = async (url, params, axiosConfig) => {
   }
 
   const data = await cache.get(url);
+
+  // if (data === null) {
+  //   // If data is null, this means you received a 401 code, so
+  //   // the jwt is not valid anymore.
+  //   return authStorage.removeToken();
+  // }
   return data ? { ok: true, data } : response;
 };
 

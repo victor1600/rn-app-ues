@@ -8,6 +8,7 @@ import LoginScreen from "./app/screens/LoginScreen";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 import { useState } from "react";
+import authApi from "./app/api/auth";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -15,24 +16,26 @@ export default function App() {
 
   const restoreUser = async () => {
     const user = await authStorage.getUser();
+    // TODO: create endpoint to validate if jwt is still valid.
     if (user) setUser(user);
   };
 
-  if (!isReady)
-    return (
-      <AppLoading
-        startAsync={restoreUser}
-        onFinish={() => setIsReady(true)}
-        onError={console.warn}
-      />
-    );
+  // if (!isReady)
+  //   return (
+  //     <AppLoading
+  //       startAsync={restoreUser}
+  //       onFinish={() => setIsReady(true)}
+  //       onError={console.warn}
+  //     />
+  //   );
   // TODO: Expired jwt raises invalid signature error.
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice />
       <NavigationContainer theme={navigationTheme}>
-        {user ? <QuizNavigator /> : <LoginScreen />}
+        {/* {user ? <QuizNavigator /> : <LoginScreen />} */}
+        <QuizNavigator />
       </NavigationContainer>
     </AuthContext.Provider>
   );
