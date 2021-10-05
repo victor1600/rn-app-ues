@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Image, Text } from "react-native";
+import { View, StyleSheet, Image, Text, FlatList } from "react-native";
 import Screen from "./Screen";
 import colors from "../config/colors";
 import quizApi from "../api/quiz";
@@ -7,10 +7,17 @@ import { useState } from "react";
 import useApi from "../hooks/useApi";
 import AppText from "../components/Text";
 import AppButton from "../components/Button";
+import { RadioButton } from "react-native-paper";
+
+const radios = [
+  { id: 1, name: "name" },
+  { id: 2, name: "name" },
+];
 
 function QuizScreen(props) {
   const getQuizApi = useApi(quizApi.getQuiz);
   const [questionCount, setQuestionCount] = useState(0);
+  const [checked, setChecked] = React.useState("first");
 
   useEffect(() => {
     getQuizApi.request();
@@ -36,9 +43,22 @@ function QuizScreen(props) {
             )}
           </View>
           <View style={styles.answerContainer}>
-            <Text>aasd</Text>
+            <FlatList
+              data={radios}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <View style={styles.radioButtonContainer}>
+                  <RadioButton
+                    value="first"
+                    color={colors.primary}
+                    status={checked === "first" ? "checked" : "unchecked"}
+                    onPress={() => setChecked("first")}
+                  />
+                  <AppText>Hola</AppText>
+                </View>
+              )}
+            />
           </View>
-
           {questionCount < getQuizApi.data.length - 1 ? (
             <AppButton title="Siguiente" onPress={getNextQuestion} />
           ) : (
@@ -53,7 +73,8 @@ function QuizScreen(props) {
 const styles = StyleSheet.create({
   answerContainer: {
     backgroundColor: colors.white,
-    padding: 30,
+
+    // padding: 30,
   },
   image: {
     width: "100%",
@@ -68,6 +89,10 @@ const styles = StyleSheet.create({
     // marginHorizontal: 10,
     marginBottom: 15,
     padding: 30,
+  },
+  radioButtonContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
