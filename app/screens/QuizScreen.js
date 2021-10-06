@@ -9,11 +9,6 @@ import AppText from "../components/Text";
 import AppButton from "../components/Button";
 import { CheckBox } from "react-native-elements";
 
-const radios = [
-  { id: 1, name: "name" },
-  { id: 2, name: "name" },
-];
-
 function QuizScreen(props) {
   const getQuizApi = useApi(quizApi.getQuiz);
   const [questionCount, setQuestionCount] = useState(0);
@@ -53,10 +48,7 @@ function QuizScreen(props) {
                     checkedIcon="dot-circle-o"
                     uncheckedIcon="circle-o"
                     checkedColor={colors.primary}
-                    containerStyle={{
-                      backgroundColor: colors.white,
-                      borderWidth: 0,
-                    }}
+                    containerStyle={styles.checkBoxContainer}
                     checked={checked === item.id ? true : false}
                     onPress={() => setChecked(item.id)}
                   />
@@ -78,9 +70,12 @@ function QuizScreen(props) {
 const styles = StyleSheet.create({
   answerContainer: {
     backgroundColor: colors.white,
-
-    // padding: 30,
   },
+  checkBoxContainer: {
+    backgroundColor: colors.white,
+    borderWidth: 0,
+  },
+
   image: {
     width: "100%",
     height: 250,

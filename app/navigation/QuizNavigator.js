@@ -40,7 +40,17 @@ const QuizNavigator = () => (
       component={SupplementaryMaterialScreen}
       options={{ title: "Material de apoyo" }}
     />
-    <Stack.Screen name="Quiz" component={QuizScreen} />
+    <Stack.Screen
+      name="Quiz"
+      component={QuizScreen}
+      // screenOptions={{
+      //   headerBackTitle: "",
+      // }}
+      // screenOptions= {{
+      //   header
+      // }}
+      options={{ headerLeft: null }}
+    />
   </Stack.Navigator>
 );
 
