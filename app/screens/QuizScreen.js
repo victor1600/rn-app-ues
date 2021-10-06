@@ -7,7 +7,7 @@ import { useState } from "react";
 import useApi from "../hooks/useApi";
 import AppText from "../components/Text";
 import AppButton from "../components/Button";
-import { RadioButton } from "react-native-paper";
+import { CheckBox } from "react-native-elements";
 
 const radios = [
   { id: 1, name: "name" },
@@ -17,7 +17,7 @@ const radios = [
 function QuizScreen(props) {
   const getQuizApi = useApi(quizApi.getQuiz);
   const [questionCount, setQuestionCount] = useState(0);
-  const [checked, setChecked] = React.useState("first");
+  const [checked, setChecked] = React.useState("");
 
   useEffect(() => {
     getQuizApi.request();
@@ -27,7 +27,7 @@ function QuizScreen(props) {
   };
 
   const handleSubmit = () => {};
-
+  console.log(getQuizApi.data);
   return (
     <Screen>
       {getQuizApi.data[0] && (
@@ -44,17 +44,22 @@ function QuizScreen(props) {
           </View>
           <View style={styles.answerContainer}>
             <FlatList
-              data={radios}
+              data={getQuizApi.data[questionCount].answers}
               keyExtractor={(item) => item.id.toString()}
               renderItem={({ item }) => (
                 <View style={styles.radioButtonContainer}>
-                  <RadioButton
-                    value="first"
-                    color={colors.primary}
-                    status={checked === "first" ? "checked" : "unchecked"}
-                    onPress={() => setChecked("first")}
+                  <CheckBox
+                    title={item.answer_text}
+                    checkedIcon="dot-circle-o"
+                    uncheckedIcon="circle-o"
+                    checkedColor={colors.primary}
+                    containerStyle={{
+                      backgroundColor: colors.white,
+                      borderWidth: 0,
+                    }}
+                    checked={checked === item.id ? true : false}
+                    onPress={() => setChecked(item.id)}
                   />
-                  <AppText>Hola</AppText>
                 </View>
               )}
             />
