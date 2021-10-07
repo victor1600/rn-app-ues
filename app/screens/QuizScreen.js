@@ -57,7 +57,15 @@ function QuizScreen({ route, navigation }) {
     Alert.alert(
       "Nota",
       grade.toString(),
-      [{ text: "OK", onPress: () => navigation.navigate("Home") }],
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            if (route) return navigation.goBack();
+            navigation.reset();
+          },
+        },
+      ],
       { cancellable: false }
     );
   };
@@ -120,7 +128,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   link: {
-    color: "blue",
+    color: "#0645AD",
   },
   image: {
     width: "100%",

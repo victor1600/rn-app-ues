@@ -6,6 +6,7 @@ import navigationTheme from "./navigationTheme";
 import colors from "../config/colors";
 import ProfileScreen from "../screens/ProfileScreen";
 import QuizScreen from "../screens/QuizScreen";
+import QuizConfigScreen from "../screens/QuizConfigScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,9 +37,11 @@ const AppNavigator = () => {
       })}
     >
       <Tab.Screen name="Home" component={CoursesNavigator} />
+      {/* TODO: Fix Exam navigations, is not working. */}
+
       <Tab.Screen
         name="Examen"
-        component={QuizScreen}
+        component={QuizConfigScreen}
         options={{
           title: "Examen",
           headerShown: true,

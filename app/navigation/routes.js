@@ -3,4 +3,6 @@ export default Object.freeze({
   SUPPLEMENTARY: "Supplementary",
   TOPICS: "Topics",
   TOPICS_SUBMENU: "Topics_SubMenu",
+  QUIZ_CONFIG: "Quiz_Config",
+  QUIZ: "Quiz",
 });
