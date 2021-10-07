@@ -20,7 +20,10 @@ function QuizScreen({ route, navigation }) {
   const [error, setError] = useState();
   // const [answers, setAnswers] = useState([]);
   useEffect(() => {
-    getQuizApi.request(topic.id);
+    if (topic) {
+      getQuizApi.request(topic.id);
+    }
+    getQuizApi.request();
   }, []);
 
   const getNextQuestion = async () => {
@@ -50,11 +53,11 @@ function QuizScreen({ route, navigation }) {
       return;
     }
     const grade = result.data.grade;
-
+    // TODO: fix this
     Alert.alert(
       "Nota",
       grade.toString(),
-      [{ text: "OK", onPress: () => navigation.goBack() }],
+      [{ text: "OK", onPress: () => navigation.navigate("Home") }],
       { cancellable: false }
     );
   };

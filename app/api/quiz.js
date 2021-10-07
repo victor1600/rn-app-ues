@@ -3,8 +3,13 @@ import client from "./client";
 const get_questions_endpoint = "/api/exam-questions/";
 const grade_quiz_endpoint = "/api/calculate-grade/";
 
-const getQuiz = (topicId) =>
-  client.get(`${get_questions_endpoint}?topic=${topicId}`);
+const getQuiz = (topicId) => {
+  let url = `${get_questions_endpoint}`;
+  if (topicId) {
+    url += `?topic=${topicId}`;
+  }
+  return client.get(url);
+};
 
 const gradeQuiz = (answers) => client.post(grade_quiz_endpoint, answers);
 

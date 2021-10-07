@@ -6,8 +6,6 @@ export default {
   colors: {
     ...DefaultTheme.colors,
     primary: colors.white,
-    // card: "rgb(255, 255, 255)",
-    // text: "rgb(28, 28, 30)",
-    // background: colors.primary,
+    background: colors.primary,
   },
 };

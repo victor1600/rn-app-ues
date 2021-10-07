@@ -2,13 +2,14 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import AppLoading from "expo-app-loading";
 import navigationTheme from "./app/navigation/navigationTheme";
-import QuizNavigator from "./app/navigation/QuizNavigator";
+import CoursesNavigator from "./app/navigation/CoursesNavigator";
 import OfflineNotice from "./app/components/OfflineNotice";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 import { useState } from "react";
 import authApi from "./app/api/auth";
+import AppNavigator from "./app/navigation/AppNavigator";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -34,8 +35,9 @@ export default function App() {
     <AuthContext.Provider value={{ user, setUser }}>
       <OfflineNotice />
       <NavigationContainer theme={navigationTheme}>
-        {/* {user ? <QuizNavigator /> : <LoginScreen />} */}
-        <QuizNavigator />
+        {user ? <AppNavigator /> : <LoginScreen />}
+        {/* <CoursesNavigator /> */}
+        {/* <AppNavigator /> */}
       </NavigationContainer>
     </AuthContext.Provider>
   );

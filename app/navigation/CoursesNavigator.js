@@ -11,7 +11,7 @@ import QuizScreen from "../screens/QuizScreen";
 
 const Stack = createStackNavigator();
 
-const QuizNavigator = () => (
+const CoursesNavigator = () => (
   <Stack.Navigator
     theme={navigationTheme}
     screenOptions={{
@@ -48,4 +48,4 @@ const QuizNavigator = () => (
   </Stack.Navigator>
 );
 
-export default QuizNavigator;
+export default CoursesNavigator;
