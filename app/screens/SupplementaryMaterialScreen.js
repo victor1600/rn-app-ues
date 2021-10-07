@@ -14,7 +14,7 @@ import materials from "../api/materials";
 const link =
   "http://localhost:8000/mediafiles/files/2021/09/05/Crear_un_Informe_Personalizado_de_Familias_Parte-Miembro_en_FRLS.pdf";
 
-function SupplementaryMaterialScreen({ route, navigation }) {
+function SupplementaryMaterialScreen({ route }) {
   const topic = route.params;
   const getMaterialsApi = useApi(materials.getMaterials);
   const refresh = useRefresh(getMaterialsApi, topic.id);

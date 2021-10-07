@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, Image, Text, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, Linking, Alert } from "react-native";
 import Screen from "./Screen";
 import colors from "../config/colors";
 import quizApi from "../api/quiz";
@@ -8,6 +8,7 @@ import useApi from "../hooks/useApi";
 import AppText from "../components/Text";
 import AppButton from "../components/Button";
 import { CheckBox } from "react-native-elements";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 let answers = [];
 function QuizScreen({ route, navigation }) {
@@ -21,13 +22,22 @@ function QuizScreen({ route, navigation }) {
   useEffect(() => {
     getQuizApi.request(topic.id);
   }, []);
-  const getNextQuestion = () => {
-    answers.push(checked);
-    setQuestionCount(questionCount + 1);
-  };
 
-  const handleSubmit = async () => {
+  const getNextQuestion = async () => {
+    if (!checked) {
+      Alert.alert("Error", "Por favor selecciona una respuesta.", {
+        cancellable: false,
+      });
+      return;
+    }
     answers.push(checked);
+    setChecked("");
+    if (questionCount < getQuizApi.data.length - 1) {
+      setQuestionCount(questionCount + 1);
+      return;
+    }
+
+    console.log(answers);
     const result = await gradeQuizApi.request({ answers });
     answers = [];
 
@@ -40,8 +50,15 @@ function QuizScreen({ route, navigation }) {
       return;
     }
     const grade = result.data.grade;
-    console.log(grade);
+
+    Alert.alert(
+      "Nota",
+      grade.toString(),
+      [{ text: "OK", onPress: () => navigation.goBack() }],
+      { cancellable: false }
+    );
   };
+
   return (
     <Screen>
       {getQuizApi.data[0] && (
@@ -50,10 +67,18 @@ function QuizScreen({ route, navigation }) {
             <AppText>{getQuizApi.data[questionCount].question_text}</AppText>
 
             {getQuizApi.data[questionCount].question_image && (
-              <Image
-                source={{ uri: getQuizApi.data[questionCount].question_image }}
-                style={styles.image}
-              />
+              <TouchableWithoutFeedback
+                onPress={() =>
+                  Linking.openURL(getQuizApi.data[questionCount].question_image)
+                }
+              >
+                <AppText style={styles.link}>Imagen de apoyo</AppText>
+              </TouchableWithoutFeedback>
+
+              // <Image
+              //   source={{ uri: getQuizApi.data[questionCount].question_image }}
+              //   style={styles.image}
+              // />
             )}
           </View>
           <View style={styles.answerContainer}>
@@ -75,11 +100,8 @@ function QuizScreen({ route, navigation }) {
               )}
             />
           </View>
-          {questionCount < getQuizApi.data.length - 1 ? (
-            <AppButton title="Siguiente" onPress={getNextQuestion} />
-          ) : (
-            <AppButton title="Finalizar" onPress={handleSubmit} />
-          )}
+
+          <AppButton title="Siguiente" onPress={getNextQuestion} />
         </>
       )}
     </Screen>
@@ -94,7 +116,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderWidth: 0,
   },
-
+  link: {
+    color: "blue",
+  },
   image: {
     width: "100%",
     height: 250,
