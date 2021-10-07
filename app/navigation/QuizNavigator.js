@@ -43,13 +43,7 @@ const QuizNavigator = () => (
     <Stack.Screen
       name="Quiz"
       component={QuizScreen}
-      // screenOptions={{
-      //   headerBackTitle: "",
-      // }}
-      // screenOptions= {{
-      //   header
-      // }}
-      options={{ headerLeft: null }}
+      // options={{ headerLeft: null }}
     />
   </Stack.Navigator>
 );

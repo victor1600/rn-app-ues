@@ -9,20 +9,39 @@ import AppText from "../components/Text";
 import AppButton from "../components/Button";
 import { CheckBox } from "react-native-elements";
 
-function QuizScreen(props) {
+let answers = [];
+function QuizScreen({ route, navigation }) {
+  const topic = route.params;
   const getQuizApi = useApi(quizApi.getQuiz);
+  const gradeQuizApi = useApi(quizApi.gradeQuiz);
   const [questionCount, setQuestionCount] = useState(0);
-  const [checked, setChecked] = React.useState("");
-
+  const [checked, setChecked] = useState("");
+  const [error, setError] = useState();
+  // const [answers, setAnswers] = useState([]);
   useEffect(() => {
-    getQuizApi.request();
+    getQuizApi.request(topic.id);
   }, []);
   const getNextQuestion = () => {
+    answers.push(checked);
     setQuestionCount(questionCount + 1);
   };
 
-  const handleSubmit = () => {};
-  console.log(getQuizApi.data);
+  const handleSubmit = async () => {
+    answers.push(checked);
+    const result = await gradeQuizApi.request({ answers });
+    answers = [];
+
+    if (!result.ok) {
+      if (result.data) setError(result.data.error);
+      else {
+        setError("An unexpected error occurred.");
+        console.log(result);
+      }
+      return;
+    }
+    const grade = result.data.grade;
+    console.log(grade);
+  };
   return (
     <Screen>
       {getQuizApi.data[0] && (
