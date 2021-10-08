@@ -1,5 +1,12 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, FlatList, Linking, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Linking,
+  Alert,
+  TouchableWithoutFeedback,
+} from "react-native";
 import Screen from "./Screen";
 import colors from "../config/colors";
 import quizApi from "../api/quiz";
@@ -8,7 +15,8 @@ import useApi from "../hooks/useApi";
 import AppText from "../components/Text";
 import AppButton from "../components/Button";
 import { CheckBox } from "react-native-elements";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+// import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 let answers = [];
 function QuizScreen({ route, navigation }) {
@@ -18,6 +26,7 @@ function QuizScreen({ route, navigation }) {
   const [questionCount, setQuestionCount] = useState(0);
   const [checked, setChecked] = useState("");
   const [error, setError] = useState();
+
   // const [answers, setAnswers] = useState([]);
   useEffect(() => {
     if (topic) {
@@ -71,51 +80,56 @@ function QuizScreen({ route, navigation }) {
   };
 
   return (
-    <Screen>
-      {getQuizApi.data[0] && (
-        <>
-          <View style={styles.questionContainer}>
-            <AppText>{getQuizApi.data[questionCount].question_text}</AppText>
+    <>
+      <ActivityIndicator visible={getQuizApi.loading || gradeQuizApi.loading} />
+      <Screen>
+        {getQuizApi.data[0] && (
+          <>
+            <View style={styles.questionContainer}>
+              <AppText>{getQuizApi.data[questionCount].question_text}</AppText>
 
-            {getQuizApi.data[questionCount].question_image && (
-              <TouchableWithoutFeedback
-                onPress={() =>
-                  Linking.openURL(getQuizApi.data[questionCount].question_image)
-                }
-              >
-                <AppText style={styles.link}>Imagen de apoyo</AppText>
-              </TouchableWithoutFeedback>
+              {getQuizApi.data[questionCount].question_image && (
+                <TouchableWithoutFeedback
+                  onPress={() =>
+                    Linking.openURL(
+                      getQuizApi.data[questionCount].question_image
+                    )
+                  }
+                >
+                  <AppText style={styles.link}>Imagen de apoyo</AppText>
+                </TouchableWithoutFeedback>
 
-              // <Image
-              //   source={{ uri: getQuizApi.data[questionCount].question_image }}
-              //   style={styles.image}
-              // />
-            )}
-          </View>
-          <View style={styles.answerContainer}>
-            <FlatList
-              data={getQuizApi.data[questionCount].answers}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <View style={styles.radioButtonContainer}>
-                  <CheckBox
-                    title={item.answer_text}
-                    checkedIcon="dot-circle-o"
-                    uncheckedIcon="circle-o"
-                    checkedColor={colors.primary}
-                    containerStyle={styles.checkBoxContainer}
-                    checked={checked === item.id ? true : false}
-                    onPress={() => setChecked(item.id)}
-                  />
-                </View>
+                // <Image
+                //   source={{ uri: getQuizApi.data[questionCount].question_image }}
+                //   style={styles.image}
+                // />
               )}
-            />
-          </View>
+            </View>
+            <View style={styles.answerContainer}>
+              <FlatList
+                data={getQuizApi.data[questionCount].answers}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <View style={styles.radioButtonContainer}>
+                    <CheckBox
+                      title={item.answer_text}
+                      checkedIcon="dot-circle-o"
+                      uncheckedIcon="circle-o"
+                      checkedColor={colors.primary}
+                      containerStyle={styles.checkBoxContainer}
+                      checked={checked === item.id ? true : false}
+                      onPress={() => setChecked(item.id)}
+                    />
+                  </View>
+                )}
+              />
+            </View>
 
-          <AppButton title="Siguiente" onPress={getNextQuestion} />
-        </>
-      )}
-    </Screen>
+            <AppButton title="Siguiente" onPress={getNextQuestion} />
+          </>
+        )}
+      </Screen>
+    </>
   );
 }
 
@@ -140,7 +154,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.white,
     marginTop: 20,
-    // marginHorizontal: 10,
     marginBottom: 15,
     padding: 30,
   },

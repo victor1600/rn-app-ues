@@ -13,6 +13,8 @@ import useAuth from "../auth/useAuth";
 import authApi from "../api/auth";
 import { useState } from "react";
 import colors from "../config/colors";
+import useApi from "../hooks/useApi";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
@@ -21,54 +23,58 @@ const validationSchema = Yup.object().shape({
 
 function LoginScreen(props) {
   const auth = useAuth();
+  const login = useApi(authApi.login);
 
   const [loginFailed, setLoginFailed] = useState(false);
 
   const handleSubmit = async ({ email, password }) => {
-    console.log(email, password);
-    const result = await authApi.login(email, password);
-    console.log(result);
+    // Check if this does not break something else
+    const result = await login.request(email, password);
+    console.log(result.data);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
     auth.logIn(result.data.token);
   };
 
   return (
-    <Screen style={styles.container}>
-      <View style={styles.cardContainer}>
-        <Image style={styles.image} source={require("../assets/ues.png")} />
-        <Form
-          initialValues={{ email: "", password: "" }}
-          onSubmit={handleSubmit}
-          validationSchema={validationSchema}
-        >
-          <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="email"
-            keyboardType="email-address"
-            name="email"
-            placeholder="Email"
-            textContentType="emailAddress"
-          />
-          <ErrorMessage
-            error="Invalid email and/or password."
-            visible={loginFailed}
-          />
+    <>
+      <ActivityIndicator visible={login.loading} />
+      <Screen style={styles.container}>
+        <View style={styles.cardContainer}>
+          <Image style={styles.image} source={require("../assets/ues.png")} />
+          <Form
+            initialValues={{ email: "", password: "" }}
+            onSubmit={handleSubmit}
+            validationSchema={validationSchema}
+          >
+            <FormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="email"
+              keyboardType="email-address"
+              name="email"
+              placeholder="Email"
+              textContentType="emailAddress"
+            />
+            <ErrorMessage
+              error="Invalid email and/or password."
+              visible={loginFailed}
+            />
 
-          <FormField
-            autoCapitalize="none"
-            autoCorrect={false}
-            icon="lock"
-            name="password"
-            placeholder="Password"
-            secureTextEntry
-            textContentType="password"
-          />
-          <SubmitButton title="Login" />
-        </Form>
-      </View>
-    </Screen>
+            <FormField
+              autoCapitalize="none"
+              autoCorrect={false}
+              icon="lock"
+              name="password"
+              placeholder="Password"
+              secureTextEntry
+              textContentType="password"
+            />
+            <SubmitButton title="Login" />
+          </Form>
+        </View>
+      </Screen>
+    </>
   );
 }
 
