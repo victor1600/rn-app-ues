@@ -17,6 +17,7 @@ import AppButton from "../components/Button";
 import { CheckBox } from "react-native-elements";
 // import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import ActivityIndicator from "../components/ActivityIndicator";
+import ContentNotFound from "../components/ContentNotFound";
 
 let answers = [];
 function QuizScreen({ route, navigation }) {
@@ -99,11 +100,6 @@ function QuizScreen({ route, navigation }) {
                 >
                   <AppText style={styles.link}>Imagen de apoyo</AppText>
                 </TouchableWithoutFeedback>
-
-                // <Image
-                //   source={{ uri: getQuizApi.data[questionCount].question_image }}
-                //   style={styles.image}
-                // />
               )}
             </View>
             <View style={styles.answerContainer}>
@@ -128,7 +124,7 @@ function QuizScreen({ route, navigation }) {
 
             <AppButton title="Siguiente" onPress={getNextQuestion} />
           </>
-        )) || <AppText>No questions found</AppText>}
+        )) || <ContentNotFound title="Cuestionario" />}
       </Screen>
     </>
   );

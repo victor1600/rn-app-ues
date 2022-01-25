@@ -14,7 +14,7 @@ const options = [
   },
   {
     id: 2,
-    text: "Preguntas",
+    text: "Cuestionario",
     route: routes.QUIZ,
   },
 ];
@@ -37,11 +37,6 @@ function SubMenuTopicsScreen({ navigation, route }) {
             icon="chevron-right"
             onPress={() => navigation.navigate(item.route, topic)}
           />
-          // <IconCard
-          //   text={item.text}
-          //   image={item.image}
-          //   onPress={() => navigation.navigate(item.route, topic)}
-          // />
         )}
         ItemSeparatorComponent={ListItemSeparator}
       />

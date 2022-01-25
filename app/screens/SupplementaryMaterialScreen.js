@@ -4,6 +4,7 @@ import { View, StyleSheet, FlatList, Linking, Button } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import AppText from "../components/Text";
 import ListItem from "../components/lists/ListItem";
+import ContentNotFound from "../components/ContentNotFound";
 
 import useApi from "../hooks/useApi";
 import useRefresh from "../hooks/useRefresh";
@@ -50,7 +51,7 @@ function SupplementaryMaterialScreen({ route }) {
             onPress={() => Linking.openURL(item.file)}
           />
         )}
-        ListEmptyComponent={() => <AppText>No material found.</AppText>}
+        ListEmptyComponent={() => <ContentNotFound title="Material de apoyo" />}
       />
     </Screen>
   );

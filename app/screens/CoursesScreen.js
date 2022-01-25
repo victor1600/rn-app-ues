@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, FlatList, Button } from "react-native";
-import IconCard from "../components/IconCard";
 import Screen from "./Screen";
 import useApi from "../hooks/useApi";
 import useRefresh from "../hooks/useRefresh";
@@ -9,6 +8,7 @@ import AppText from "../components/Text";
 import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
 import SmallCard from "../components/SmallCard";
+import ContentNotFound from "../components/ContentNotFound";
 
 function CoursesScreen({ navigation }) {
   const getCoursesApi = useApi(coursesApi.getCourses);
@@ -35,7 +35,7 @@ function CoursesScreen({ navigation }) {
           refreshing={refresh.refreshing}
           numColumns={2}
           contentContainerStyle={{
-            paddingTop: 20,
+            paddingTop: 50,
           }}
           renderItem={({ item }) => (
             <SmallCard
@@ -44,7 +44,7 @@ function CoursesScreen({ navigation }) {
               onPress={() => navigation.navigate(routes.TOPICS, item)}
             />
           )}
-          ListEmptyComponent={() => <AppText>No courses found</AppText>}
+          ListEmptyComponent={() => <ContentNotFound />}
         />
       </Screen>
     </>
