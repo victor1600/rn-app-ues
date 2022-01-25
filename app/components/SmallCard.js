@@ -24,13 +24,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-end",
     backgroundColor: "white",
-    margin: 20,
-    width: "40%",
+    margin: 10,
+    //marginBottom: 10,
+    width: "45%",
   },
   image: {
     width: "100%",
     height: 50,
-    marginBottom: 10,
+    marginBottom: 7,
   },
 });
 
