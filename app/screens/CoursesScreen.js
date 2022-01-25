@@ -8,6 +8,7 @@ import coursesApi from "../api/courses";
 import AppText from "../components/Text";
 import ActivityIndicator from "../components/ActivityIndicator";
 import routes from "../navigation/routes";
+import SmallCard from "../components/SmallCard";
 
 function CoursesScreen({ navigation }) {
   const getCoursesApi = useApi(coursesApi.getCourses);
@@ -32,8 +33,12 @@ function CoursesScreen({ navigation }) {
           keyExtractor={(course) => course.id.toString()}
           onRefresh={refresh.onRefresh}
           refreshing={refresh.refreshing}
+          numColumns={2}
+          contentContainerStyle={{
+            paddingTop: 20,
+          }}
           renderItem={({ item }) => (
-            <IconCard
+            <SmallCard
               text={item.name}
               image={{ uri: item.icon }}
               onPress={() => navigation.navigate(routes.TOPICS, item)}

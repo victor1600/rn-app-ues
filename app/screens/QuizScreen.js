@@ -31,8 +31,9 @@ function QuizScreen({ route, navigation }) {
   useEffect(() => {
     if (topic) {
       getQuizApi.request(topic.id);
+    } else {
+      getQuizApi.request();
     }
-    getQuizApi.request();
   }, []);
 
   const getNextQuestion = async () => {
@@ -83,7 +84,7 @@ function QuizScreen({ route, navigation }) {
     <>
       <ActivityIndicator visible={getQuizApi.loading || gradeQuizApi.loading} />
       <Screen>
-        {getQuizApi.data[0] && (
+        {(getQuizApi.data[0] && (
           <>
             <View style={styles.questionContainer}>
               <AppText>{getQuizApi.data[questionCount].question_text}</AppText>
@@ -127,7 +128,7 @@ function QuizScreen({ route, navigation }) {
 
             <AppButton title="Siguiente" onPress={getNextQuestion} />
           </>
-        )}
+        )) || <AppText>No questions found</AppText>}
       </Screen>
     </>
   );

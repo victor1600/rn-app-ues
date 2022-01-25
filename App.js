@@ -10,6 +10,7 @@ import authStorage from "./app/auth/storage";
 import { useState } from "react";
 import authApi from "./app/api/auth";
 import AppNavigator from "./app/navigation/AppNavigator";
+import NewCoursesScreen from "./app/screens/NewCoursesScreen";
 
 export default function App() {
   const [user, setUser] = useState();
@@ -36,6 +37,8 @@ export default function App() {
       <OfflineNotice />
       <NavigationContainer theme={navigationTheme}>
         {user ? <AppNavigator /> : <LoginScreen />}
+        {/* <AppNavigator /> */}
+        {/* <NewCoursesScreen /> */}
         {/* <CoursesNavigator /> */}
         {/* <AppNavigator /> */}
       </NavigationContainer>

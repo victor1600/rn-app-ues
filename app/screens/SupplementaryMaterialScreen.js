@@ -50,9 +50,7 @@ function SupplementaryMaterialScreen({ route }) {
             onPress={() => Linking.openURL(item.file)}
           />
         )}
-        ListEmptyComponent={() => (
-          <AppText>No material found for {topic.name}</AppText>
-        )}
+        ListEmptyComponent={() => <AppText>No material found.</AppText>}
       />
     </Screen>
   );
