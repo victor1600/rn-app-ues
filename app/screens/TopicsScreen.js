@@ -43,13 +43,13 @@ function TopicsScreen({ title = "Topics", route, navigation }) {
         refreshing={refresh.refreshing}
         renderItem={({ item }) => (
           <ListItem
-            text={item.name}
+            text={item.texto}
             icon="chevron-right"
             onPress={() => navigation.navigate(routes.TOPICS_SUBMENU, item)}
           />
         )}
         ListEmptyComponent={() => (
-          <AppText>No topics found for {course.name}</AppText>
+          <AppText>No topics found for {course.texto}</AppText>
         )}
       />
     </Screen>

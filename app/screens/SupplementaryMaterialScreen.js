@@ -12,9 +12,6 @@ import useRefresh from "../hooks/useRefresh";
 import Screen from "./Screen";
 import materials from "../api/materials";
 
-const link =
-  "http://localhost:8000/mediafiles/files/2021/09/05/Crear_un_Informe_Personalizado_de_Familias_Parte-Miembro_en_FRLS.pdf";
-
 function SupplementaryMaterialScreen({ route }) {
   const topic = route.params;
   const getMaterialsApi = useApi(materials.getMaterials);
@@ -47,11 +44,13 @@ function SupplementaryMaterialScreen({ route }) {
         renderItem={({ item }) => (
           <ListItem
             icon="open-in-new"
-            text={item.name}
-            onPress={() => Linking.openURL(item.file)}
+            text={item.texto}
+            onPress={() => Linking.openURL(item.archivo)}
           />
         )}
-        ListEmptyComponent={() => <ContentNotFound title="Material de apoyo" />}
+        ListEmptyComponent={() => (
+          <ContentNotFound title="Material de estudio" />
+        )}
       />
     </Screen>
   );

@@ -6,7 +6,7 @@ const grade_quiz_endpoint = "/api/calculate-grade/";
 const getQuiz = (topicId) => {
   let url = `${get_questions_endpoint}`;
   if (topicId) {
-    url += `?topic=${topicId}`;
+    url += `?tema=${topicId}`;
   }
   return client.get(url);
 };

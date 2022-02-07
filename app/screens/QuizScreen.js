@@ -80,7 +80,6 @@ function QuizScreen({ route, navigation }) {
       { cancellable: false }
     );
   };
-
   return (
     <>
       <ActivityIndicator visible={getQuizApi.loading || gradeQuizApi.loading} />
@@ -88,14 +87,12 @@ function QuizScreen({ route, navigation }) {
         {(getQuizApi.data[0] && (
           <>
             <View style={styles.questionContainer}>
-              <AppText>{getQuizApi.data[questionCount].question_text}</AppText>
+              <AppText>{getQuizApi.data[questionCount].texto}</AppText>
 
-              {getQuizApi.data[questionCount].question_image && (
+              {getQuizApi.data[questionCount].imagen && (
                 <TouchableWithoutFeedback
                   onPress={() =>
-                    Linking.openURL(
-                      getQuizApi.data[questionCount].question_image
-                    )
+                    Linking.openURL(getQuizApi.data[questionCount].imagen)
                   }
                 >
                   <AppText style={styles.link}>Imagen de apoyo</AppText>
@@ -109,7 +106,7 @@ function QuizScreen({ route, navigation }) {
                 renderItem={({ item }) => (
                   <View style={styles.radioButtonContainer}>
                     <CheckBox
-                      title={item.answer_text}
+                      title={item.texto}
                       checkedIcon="dot-circle-o"
                       uncheckedIcon="circle-o"
                       checkedColor={colors.primary}

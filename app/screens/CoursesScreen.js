@@ -39,8 +39,8 @@ function CoursesScreen({ navigation }) {
           }}
           renderItem={({ item }) => (
             <SmallCard
-              text={item.name}
-              image={{ uri: item.icon }}
+              text={item.texto}
+              image={{ uri: item.icono }}
               onPress={() => navigation.navigate(routes.TOPICS, item)}
             />
           )}
