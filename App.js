@@ -37,6 +37,7 @@ export default function App() {
       <NavigationContainer theme={navigationTheme}>
         {user ? <AppNavigator /> : <LoginScreen />}
         {/* <AppNavigator /> */}
+        {/* <AppNavigator /> */}
         {/* <NewCoursesScreen /> */}
         {/* <CoursesNavigator /> */}
         {/* <AppNavigator /> */}

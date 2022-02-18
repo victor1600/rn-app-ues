@@ -1,6 +1,7 @@
 import client from "./client";
 
-const login = (email, password) => client.post("/login/", { email, password });
+const login = (username, password) =>
+  client.post("/auth/jwt/create/", { username, password });
 
 export default {
   login,

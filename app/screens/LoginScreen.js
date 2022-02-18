@@ -17,7 +17,7 @@ import useApi from "../hooks/useApi";
 import ActivityIndicator from "../components/ActivityIndicator";
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().required().email().label("Email"),
+  username: Yup.string().required().min(2).label("Username"),
   password: Yup.string().required().min(4).label("Password"),
 });
 
@@ -27,13 +27,12 @@ function LoginScreen(props) {
 
   const [loginFailed, setLoginFailed] = useState(false);
 
-  const handleSubmit = async ({ email, password }) => {
-    // Check if this does not break something else
-    const result = await login.request(email, password);
-    console.log(result.data);
+  const handleSubmit = async ({ username, password }) => {
+    const result = await login.request(username, password);
     if (!result.ok) return setLoginFailed(true);
     setLoginFailed(false);
-    auth.logIn(result.data.token);
+    console.log(result.data.access);
+    auth.logIn(result.data.access);
   };
 
   return (
@@ -51,13 +50,13 @@ function LoginScreen(props) {
               autoCapitalize="none"
               autoCorrect={false}
               icon="email"
-              keyboardType="email-address"
-              name="email"
-              placeholder="Email"
-              textContentType="emailAddress"
+              // keyboardType="email-address"
+              name="username"
+              placeholder="username"
+              // textContentType="emailAddress"
             />
             <ErrorMessage
-              error="Invalid email and/or password."
+              error="Invalid username and/or password."
               visible={loginFailed}
             />
 
