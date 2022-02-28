@@ -9,7 +9,9 @@ function ListItem({ icon, text, onPress }) {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        <AppText style={{ flex: 1 }}>{text}</AppText>
+        <AppText numberOfLines={1} style={{ flex: 1 }}>
+          {text}
+        </AppText>
 
         <MaterialCommunityIcons color={colors.primary} name={icon} size={25} />
       </View>
