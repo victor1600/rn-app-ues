@@ -7,6 +7,7 @@ import colors from "../config/colors";
 import ProfileScreen from "../screens/Profile/index";
 import QuizScreen from "../screens/QuizScreen";
 import QuizConfigScreen from "../screens/QuizConfigScreen";
+import ScoreScreen from "../screens/Score";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +25,8 @@ const AppNavigator = () => {
 						iconName = "account-circle";
 					} else if (route.name === "Examen") {
 						iconName = "file-document-edit-outline";
+					} else if (route.name === 'Score') {
+						iconName = 'gamepad-variant'
 					}
 
 					// You can return any component that you like here!
@@ -59,6 +62,17 @@ const AppNavigator = () => {
 					headerStyle: { backgroundColor: colors.primary },
 				}}
 			/>
+			<Tab.Screen
+				name="Score"
+				component={ScoreScreen}
+				options={{
+					title: "Score",
+					headerShown: true,
+					headerTintColor: colors.white,
+					headerStyle: { backgroundColor: colors.primary },
+				}}
+			/>
+
 		</Tab.Navigator>
 	);
 };

@@ -10,8 +10,8 @@ import stylesText from '../../components/Text/styles'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ActivityIndicator from "../../components/ActivityIndicator";
 
-export const ProfileScreen = ({ route, navigation }) => {
-	const { loading, profile, getProfile, handleOpenPicker, refresh, setRefresh } = useProfile()
+export const ProfileScreen = () => {
+	const { loading, profile, getProfile, handleOpenPicker, refresh } = useProfile()
 	const auth = useAuth();
 
 	useEffect(() => {
