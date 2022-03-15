@@ -24,6 +24,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 let answers = [];
 function QuizScreen({ route, navigation }) {
 	const topic = route.params;
+	const numberQuestions = route.params
 	const getQuizApi = useApi(quizApi.getQuiz);
 	const gradeQuizApi = useApi(quizApi.gradeQuiz);
 	const [questionCount, setQuestionCount] = useState(0);
@@ -34,7 +35,7 @@ function QuizScreen({ route, navigation }) {
 
 	useEffect(() => {
 		if (topic) {
-			getQuizApi.request(topic.id);
+			getQuizApi.request(topic.id, numberQuestions.number);
 		} else {
 			getQuizApi.request();
 		}
@@ -132,7 +133,7 @@ function QuizScreen({ route, navigation }) {
 												styles.radioButtonContainer]}>
 										<View style={{ flexDirection: 'row', flex: 1 }}>
 											<CheckBox
-												title={item.texto}
+												title={item.imagen ? '' : item.texto}
 												checkedIcon="dot-circle-o"
 												uncheckedIcon="circle-o"
 												checkedColor={colors.primary}
