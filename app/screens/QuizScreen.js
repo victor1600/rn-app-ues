@@ -20,6 +20,7 @@ import { CheckBox } from "react-native-elements";
 import ActivityIndicator from "../components/ActivityIndicator";
 import ContentNotFound from "../components/ContentNotFound";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { resize } from '../config/resize'
 
 let answers = [];
 function QuizScreen({ route, navigation }) {
@@ -111,7 +112,7 @@ function QuizScreen({ route, navigation }) {
 										onPress={() =>
 											Linking.openURL(getQuizApi.data[questionCount].imagen)
 										}
-										style={{ height: 100, width: 300 }}
+										style={{ height: resize(100), width: resize(300) }}
 									>
 										<Image source={{ uri: getQuizApi.data[questionCount].imagen }} style={{ flex: 1 }} resizeMode={'contain'} />
 									</TouchableOpacity>
@@ -131,9 +132,9 @@ function QuizScreen({ route, navigation }) {
 										(review && answersReview[questionCount] === item.id && item.es_respuesta_correcta) || (review && item.es_respuesta_correcta) ? styles.radioButtonContainerCorrect :
 											(review && answersReview[questionCount] === item.id && !item.es_respuesta_correcta) ? styles.radioButtonContainerWrong :
 												styles.radioButtonContainer]}>
-										<View style={{ flexDirection: 'row', flex: 1 }}>
+										<View style={{ flexDirection: !item.imagen ? 'column' : 'row', flex: 1 }}>
 											<CheckBox
-												title={item.imagen ? '' : item.texto}
+												title={item.texto}
 												checkedIcon="dot-circle-o"
 												uncheckedIcon="circle-o"
 												checkedColor={colors.primary}
@@ -144,9 +145,12 @@ function QuizScreen({ route, navigation }) {
 													checked === item.id ? true : false}
 												onPress={() => review ? {} : setChecked(item.id)}
 											/>
-											<TouchableOpacity onPress={() => review ? {} : setChecked(item.id)} style={{ height: 50, width: 100 }}>
-												<Image source={{ uri: item.imagen }} style={{ flex: 1 }} resizeMode={'contain'} />
-											</TouchableOpacity>
+											{item.imagen &&
+												<TouchableOpacity onPress={() => review ? {} : setChecked(item.id)}
+													style={{ height: resize(100), width: resize(250) }}>
+													<Image source={{ uri: item.imagen }} style={{ flex: 1 }} resizeMode={'contain'} />
+												</TouchableOpacity>
+											}
 										</View>
 										{
 											((review && answersReview[questionCount] === item.id && item.es_respuesta_correcta) || (review && item.es_respuesta_correcta)) &&
