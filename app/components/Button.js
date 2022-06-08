@@ -7,12 +7,13 @@ function AppButton({
 	title,
 	onPress,
 	color = "primary",
-	// marginHorizontal = 10,
+	disabled = false,
+	disabledFunction = () => console.log('no disponible')
 }) {
 	return (
 		<TouchableOpacity
-			style={[styles.button, { backgroundColor: colors[color] }]}
-			onPress={onPress}
+			style={[styles.button, { backgroundColor: disabled ? colors.gray : colors[color] }]}
+			onPress={() => disabled ? disabledFunction() : onPress()}
 		>
 			<Text style={styles.text}>{title}</Text>
 		</TouchableOpacity>
@@ -26,8 +27,6 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		borderRadius: 5,
 		padding: 10,
-		// width: "98%",
-		// marginVertical: 10,
 		margin: 12,
 	},
 	text: {

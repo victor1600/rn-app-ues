@@ -5,7 +5,6 @@ import CoursesNavigator from "./CoursesNavigator";
 import navigationTheme from "./navigationTheme";
 import colors from "../config/colors";
 import ProfileScreen from "../screens/Profile/index";
-import QuizScreen from "../screens/QuizScreen";
 import QuizConfigScreen from "../screens/QuizConfigScreen";
 import ScoreScreen from "../screens/Score";
 

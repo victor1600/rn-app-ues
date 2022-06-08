@@ -5,5 +5,6 @@ export default Object.freeze({
 	TOPICS_SUBMENU: "Topics_SubMenu",
 	QUIZ_CONFIG: "Quiz_Config",
 	QUIZ: "Quiz",
-	SCORE: 'Score'
+	SCORE: 'Score',
+	LEVEL: 'Level'
 });
