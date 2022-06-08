@@ -8,6 +8,7 @@ import styles from './styles';
 import AppText from "../../components/Text";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Modal from '../../components/Modal'
+import Swipper from '../../components/Swipper'
 
 export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }) => {
 	const { params } = route
@@ -47,8 +48,8 @@ export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }
 								/>
 							))
 						}
-						<Modal visible={showModal} dismiss={() => setShowModal(false)}>
-							<AppText>Hello World!</AppText>
+						<Modal visible={showModal} dismiss={() => setShowModal(false)} botton={'Aceptar'}>
+							<Swipper items={[]} />
 						</Modal>
 					</View>
 					:

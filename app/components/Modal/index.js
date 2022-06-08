@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Modal, View, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { Modal, View } from 'react-native';
 import styles from './styles';
 import AppButton from "../Button";
 
 const CustomModal = ({
 	children,
 	visible,
-	dismiss = () => { }
+	dismiss = () => { },
+	botton = 'OK'
 }) => {
 	return (
 		<View style={styles.centeredView} >
@@ -19,17 +20,14 @@ const CustomModal = ({
 					<View style={styles.modalView}>
 						{children}
 						<AppButton
-							title={'OK'}
+							title={botton}
 							onPress={() => dismiss()}
 						/>
 					</View>
 				</View>
 			</Modal>
-
 		</View>
-
 	)
-
 }
 
 export default CustomModal

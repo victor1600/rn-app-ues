@@ -1,6 +1,4 @@
 import { StyleSheet } from "react-native";
-import colors from '../../config/colors'
-import { resize } from '../../config/resize'
 
 export default StyleSheet.create({
 	centeredView: {
