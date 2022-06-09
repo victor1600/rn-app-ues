@@ -9,10 +9,11 @@ import AppText from "../../components/Text";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Modal from '../../components/Modal'
 import Swipper from '../../components/Swipper'
+import LevelCard from '../../components/LevelCards'
 
 export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }) => {
 	const { params } = route
-	const { levelData, loading, getLevel } = useLevel(params.id)
+	const { levelData, loading, getLevel, rulesData } = useLevel(params.id)
 	const [showModal, setShowModal] = useState(false)
 
 	useEffect(() => {
@@ -40,7 +41,7 @@ export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }
 						</View>
 						{
 							levelData.map((i, index) => (
-								<AppButton
+								<LevelCard
 									key={index}
 									title={i.name}
 									onPress={() => { }}
@@ -49,7 +50,7 @@ export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }
 							))
 						}
 						<Modal visible={showModal} dismiss={() => setShowModal(false)} botton={'Aceptar'}>
-							<Swipper items={[]} />
+							<Swipper items={rulesData} />
 						</Modal>
 					</View>
 					:

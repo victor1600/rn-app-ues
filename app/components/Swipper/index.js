@@ -14,8 +14,8 @@ const CustomSwipper = ({
 				{
 					items.map((i, index) => (
 						<View style={styles.wrapper} key={index}>
-							<Image source={{ uri: i.image }} style={styles.image} resizeMode={'contain'} />
-							<AppText>{i.ruler}</AppText>
+							<Image source={{ uri: i.imagen }} style={styles.image} resizeMode={'contain'} />
+							<AppText>{i.info}</AppText>
 						</View>
 					))
 				}
