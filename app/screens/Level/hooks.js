@@ -4,7 +4,6 @@ import rulesApi from '../../api/rules'
 import useApi from "../../hooks/useApi";
 
 export const useLevel = (id) => {
-	const [loading, setLoading] = useState(false)
 	const getLevelApi = useApi(topicsApi.getLevels);
 	const getRulesApi = useApi(rulesApi.getRules);
 	const [levelData, setLevelData] = useState([])
@@ -12,19 +11,16 @@ export const useLevel = (id) => {
 
 	const getLevel = async () => {
 		try {
-			setLoading(true)
 			const level = await getLevelApi.request(id)
 			const rules = await getRulesApi.request()
-			setRulesData(rules.data)
+			setRulesData(rules.data.filter(e => e.type === 'Curso'))
 			setLevelData(level.data)
-			setLoading(false)
 		} catch (error) {
-			setLoading(false)
 		}
 	}
 
 	return {
-		loading,
+		loading: getLevelApi.loading || getRulesApi.loading,
 		levelData,
 		getLevel,
 		rulesData

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Modal, View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import AppText from "../../components/Text";
 import LottieView from 'lottie-react-native';

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity } from "react-native";
 import Screen from "../Screen";
-import AppButton from "../../components/Button";
 import { useLevel } from './hooks'
 import ActivityIndicator from "../../components/ActivityIndicator";
 import styles from './styles';
@@ -25,12 +24,11 @@ export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }
 			scroll={false}
 		>
 			{
-				levelData ?
+				!loading ?
 					<View style={styles.container}>
 						<View style={styles.row}>
 							<AppText style={styles.subTitle}>Selecciona el nivel de dificultad que deseas estudiar:</AppText>
 							<TouchableOpacity style={styles.icon} onPress={() => {
-								console.log('entro')
 								setShowModal(true)
 							}}>
 								<MaterialCommunityIcons
@@ -44,7 +42,7 @@ export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }
 								<LevelCard
 									key={index}
 									title={i.name}
-									onPress={() => { }}
+									onPress={() => navigation.navigate('Topics', { items: i.topics, texto: params.texto })}
 									disabled={!i.available}
 								/>
 							))
@@ -55,7 +53,6 @@ export const LevelScreen = ({ title = "Nivel de dificultad", route, navigation }
 					</View>
 					:
 					<ActivityIndicator visible={loading} />
-
 			}
 		</Screen>
 	)

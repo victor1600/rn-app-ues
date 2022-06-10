@@ -1,57 +1,74 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, FlatList, Button } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 
-import ActivityIndicator from "../components/ActivityIndicator";
 import AppText from "../components/Text";
 import ListItem from "../components/lists/ListItem";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
 import Screen from "./Screen";
-import topicsApi from "../api/topics";
-import useApi from "../hooks/useApi";
 import routes from "../navigation/routes";
-import useRefresh from "../hooks/useRefresh";
 import colors from "../config/colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Modal from '../components/Modal'
+import Swipper from '../components/Swipper'
+import rulesApi from '../api/rules'
+import useApi from "../hooks/useApi";
+import ActivityIndicator from "../components/ActivityIndicator";
+import { resize } from '../config/resize'
 
 function TopicsScreen({ title = "Topics", route, navigation }) {
-	const course = route.params;
-	const getTopicsApi = useApi(topicsApi.getTopics);
-	const refresh = useRefresh(getTopicsApi, course.id);
+	const { items, texto } = route.params;
+	const [rulesData, setRulesData] = useState([])
+	const getRulesApi = useApi(rulesApi.getRules);
+	const [showModal, setShowModal] = useState(false)
 
 	useEffect(() => {
-		getTopicsApi.request(course.id);
-	}, []);
+		getRulersData()
+	}, [])
+
+	const getRulersData = async () => {
+		const rules = await getRulesApi.request()
+		setRulesData(rules.data.filter(e => e.type === 'Tema'))
+	}
+
 	return (
 		<Screen>
-			<ActivityIndicator visible={getTopicsApi.loading} />
-			{getTopicsApi.error && (
-				<>
-					<AppText>Couldn't retrieve the topics</AppText>
-					<Button
-						title="Retry"
-						onPress={() => getTopicsApi.request(course.id)}
-					/>
-				</>
-			)}
-			<View style={styles.text_container}>
-				<AppText style={styles.title}>{course.texto}</AppText>
-			</View>
-			<FlatList
-				data={getTopicsApi.data}
-				keyExtractor={(topic) => topic.id.toString()}
-				ItemSeparatorComponent={ListItemSeparator}
-				onRefresh={refresh.onRefresh}
-				refreshing={refresh.refreshing}
-				renderItem={({ item }) => (
-					<ListItem
-						text={item.texto}
-						icon="chevron-right"
-						onPress={() => navigation.navigate(routes.TOPICS_SUBMENU, item)}
-					/>
-				)}
-				ListEmptyComponent={() => (
-					<AppText>No topics found for {course.texto}</AppText>
-				)}
-			/>
+			{
+				getRulesApi.loading ?
+					<ActivityIndicator visible={getRulesApi.loading} />
+					:
+					<>
+						<View style={styles.text_container}>
+							<AppText style={styles.title}>{texto}</AppText>
+							<TouchableOpacity style={styles.icon} onPress={() => {
+								setShowModal(true)
+							}}>
+								<MaterialCommunityIcons
+									name="information-outline"
+									size={20}
+									color={'#7d7d7d'} />
+							</TouchableOpacity>
+						</View>
+						<FlatList
+							data={items}
+							keyExtractor={(topic) => topic.id.toString()}
+							ItemSeparatorComponent={ListItemSeparator}
+							renderItem={({ item }) => (
+								<ListItem
+									text={item.texto}
+									icon="chevron-right"
+									onPress={() => navigation.navigate(routes.TOPICS_SUBMENU, item)}
+									level={item.nivel_usuario_actual}
+								/>
+							)}
+							ListEmptyComponent={() => (
+								<AppText>No topics found for {texto}</AppText>
+							)}
+						/>
+						<Modal visible={showModal} dismiss={() => setShowModal(false)} botton={'Aceptar'}>
+							<Swipper items={rulesData} />
+						</Modal>
+					</>
+			}
 		</Screen>
 	);
 }
@@ -59,7 +76,9 @@ function TopicsScreen({ title = "Topics", route, navigation }) {
 const styles = StyleSheet.create({
 	text_container: {
 		marginTop: 10,
-		alignItems: "center",
+		paddingHorizontal: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 	},
 	title: {
 		fontWeight: "800",
@@ -67,6 +86,10 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 		color: colors.black
 	},
+	icon: {
+		marginHorizontal: resize(5),
+		marginVertical: resize(5)
+	}
 });
 
 export default TopicsScreen;
