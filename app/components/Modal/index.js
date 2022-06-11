@@ -7,8 +7,11 @@ const CustomModal = ({
 	children,
 	visible,
 	dismiss = () => { },
-	botton = 'OK'
+	botton = 'OK',
+	secondaryBotton = null,
+	secondaryBottonOnPress = () => { }
 }) => {
+
 	return (
 		<View style={styles.centeredView} >
 			<Modal
@@ -19,14 +22,25 @@ const CustomModal = ({
 				<View style={styles.centeredView}>
 					<View style={styles.modalView}>
 						{children}
-						<AppButton
-							title={botton}
-							onPress={() => dismiss()}
-						/>
+						<View style={styles.bottonContainer}>
+
+							<AppButton
+								title={botton}
+								onPress={() => dismiss()}
+							/>
+							{
+								secondaryBotton &&
+								<AppButton
+									title={secondaryBotton}
+									onPress={() => secondaryBottonOnPress()}
+								/>
+							}
+						</View>
 					</View>
 				</View>
 			</Modal>
 		</View>
+
 	)
 }
 

@@ -23,4 +23,8 @@ export default StyleSheet.create({
 		elevation: 5,
 		justifyContent: 'space-between'
 	},
+	bottonContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	}
 })

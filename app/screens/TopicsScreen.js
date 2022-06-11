@@ -16,7 +16,7 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import { resize } from '../config/resize'
 
 function TopicsScreen({ title = "Topics", route, navigation }) {
-	const { items, texto } = route.params;
+	const { items, texto, curso } = route.params;
 	const [rulesData, setRulesData] = useState([])
 	const getRulesApi = useApi(rulesApi.getRules);
 	const [showModal, setShowModal] = useState(false)
@@ -56,7 +56,7 @@ function TopicsScreen({ title = "Topics", route, navigation }) {
 								<ListItem
 									text={item.texto}
 									icon="chevron-right"
-									onPress={() => navigation.navigate(routes.TOPICS_SUBMENU, item)}
+									onPress={() => navigation.navigate(routes.TOPICS_SUBMENU, { item: item, curso: curso })}
 									level={item.nivel_usuario_actual}
 								/>
 							)}

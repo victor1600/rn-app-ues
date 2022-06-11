@@ -16,23 +16,35 @@ import useApi from "../hooks/useApi";
 import AppText from "../components/Text";
 import AppButton from "../components/Button";
 import { CheckBox } from "react-native-elements";
-// import { TouchableOpacity } from "react-native-gesture-handler";
 import ActivityIndicator from "../components/ActivityIndicator";
 import ContentNotFound from "../components/ContentNotFound";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { resize } from '../config/resize'
+import Modal from '../components/Modal'
+import LottieView from 'lottie-react-native';
+import Congratulation from '../assets/animations/Congratulation.json'
+import getCurrentLevel from "../api/topics";
+
 
 let answers = [];
+
 function QuizScreen({ route, navigation }) {
-	const topic = route.params;
+	const { topic, curso } = route.params;
 	const numberQuestions = route.params
 	const getQuizApi = useApi(quizApi.getQuiz);
+	const getCurrentLevelApi = useApi(getCurrentLevel.getCurrentLevel);
 	const gradeQuizApi = useApi(quizApi.gradeQuiz);
 	const [questionCount, setQuestionCount] = useState(0);
 	const [checked, setChecked] = useState("");
 	const [error, setError] = useState();
 	const [review, setReview] = useState(false)
 	const [answersReview, setAnswersReview] = useState([])
+	const [skipQuestion, setSkipQuestion] = useState(true)
+	const [deleteAnswers, setDeleteAnswers] = useState(true)
+	const [answersArray, setAnswersArray] = useState([])
+	const [showModal, setShowModal] = useState(false)
+	const [grade, setGrade] = useState(0)
+	const [currentLevel, setCurrentLevel] = useState(null)
 
 	useEffect(() => {
 		if (topic) {
@@ -42,19 +54,51 @@ function QuizScreen({ route, navigation }) {
 		}
 	}, []);
 
-	const getNextQuestion = async () => {
-		if (!checked && !review) {
+	useEffect(() => {
+		if (currentLevel) {
+			setShowModal(true)
+		}
+	}, [currentLevel])
+
+	useEffect(() => {
+		if (getQuizApi.data) {
+			setAnswersArray(getQuizApi.data[questionCount]?.answers)
+		}
+	}, [getQuizApi.data])
+	useEffect(() => {
+		if (getCurrentLevelApi.data) {
+			setCurrentLevel(getCurrentLevelApi.data.current_level)
+		}
+	}, [getCurrentLevelApi.data])
+
+	const skipQuestionMethod = () => {
+		setSkipQuestion(false)
+		const rightAnswer = getQuizApi.data[questionCount].answers.find(e => e.es_respuesta_correcta)
+		getNextQuestion(rightAnswer.id)
+	}
+
+	const deleteAnswersMethod = () => {
+		setDeleteAnswers(false)
+		const rightAnswer = getQuizApi.data[questionCount].answers.find(e => e.es_respuesta_correcta)
+		const wrongAnswer = getQuizApi.data[questionCount].answers.find(e => !e.es_respuesta_correcta)
+		const answers = [rightAnswer, wrongAnswer]
+		setAnswersArray(answers)
+	}
+
+	const getNextQuestion = async (answer = checked) => {
+		if (!answer && !review) {
 			Alert.alert("Error", "Por favor selecciona una respuesta.", {
 				cancellable: false,
 			});
 			return;
 		}
 		if (!review) {
-			answers.push(checked);
+			answers.push(answer);
 		}
 		setChecked("");
 		if (questionCount < getQuizApi.data.length - 1) {
 			setQuestionCount(questionCount + 1);
+			setAnswersArray(getQuizApi.data[questionCount + 1].answers)
 			return;
 		}
 		if (review) {
@@ -70,40 +114,19 @@ function QuizScreen({ route, navigation }) {
 			if (result.data) setError(result.data.error);
 			else {
 				setError("An unexpected error occurred.");
-				console.log(result);
 			}
 			return;
 		}
 		const grade = result.data.grade;
-		// TODO: fix this
-		Alert.alert(
-			"Calificación",
-			`Su calificación es ${grade.toString()}\n¿Desea hacer una revisión?`,
-			[
-				{
-					text: "Si",
-					onPress: () => {
-						setQuestionCount(0)
-						setReview(true)
-					}
-				},
-				{
-					text: "No",
-					onPress: () => {
-						if (route) return navigation.goBack();
-						navigation.reset();
-					},
-				},
-			],
-			{ cancellable: false }
-		);
+		setGrade(grade)
+		getCurrentLevelApi.request(topic.id)
 	};
 	return (
-		<>
-			<ActivityIndicator visible={getQuizApi.loading || gradeQuizApi.loading} />
-			<Screen>
+		<Screen>
+			<View style={{ height: '100%' }}>
+				<ActivityIndicator visible={getQuizApi.loading || gradeQuizApi.loading} />
 				{(getQuizApi.data[0] && (
-					<>
+					<View style={{ flex: 1 }}>
 						<View style={styles.questionContainer}>
 							<AppText>{getQuizApi.data[questionCount].texto}</AppText>
 							{getQuizApi.data[questionCount].imagen && (
@@ -119,19 +142,47 @@ function QuizScreen({ route, navigation }) {
 								</>
 							)}
 						</View>
+						{
+							(skipQuestion || deleteAnswers) && !review && answersArray && answersArray.length > 2 &&
+							<View style={styles.wildcardContainer}>
+								{
+									skipQuestion &&
+									<TouchableOpacity style={[styles.wildcardContainer, styles.wildcard]} onPress={() => skipQuestionMethod()}>
+										<MaterialCommunityIcons
+											color={'#fff'}
+											name={'page-next-outline'}
+											size={25}
+										/>
+										<AppText style={styles.wildcardText}>Saltar Pregunta</AppText>
+									</TouchableOpacity>
+								}
+								{
+									deleteAnswers &&
+									<TouchableOpacity style={[styles.wildcardContainer, styles.wildcard]} onPress={() => deleteAnswersMethod()}>
+										<MaterialCommunityIcons
+											color={'#fff'}
+											name={'sticker-remove-outline'}
+											size={25}
+										/>
+										<AppText style={styles.wildcardText}>{`Eliminar 1\nrespuesta\nincorrecta`}</AppText>
+									</TouchableOpacity>
+								}
+							</View>
+						}
 						<View style={styles.answerContainer}>
 							{
 								review &&
 								<AppText>La respuesta correcta es:</AppText>
 							}
 							<FlatList
-								data={getQuizApi.data[questionCount].answers}
-								keyExtractor={(item) => item.id.toString()}
+								data={answersArray}
 								renderItem={({ item, index }) => (
-									<View style={[
-										(review && answersReview[questionCount] === item.id && item.es_respuesta_correcta) || (review && item.es_respuesta_correcta) ? styles.radioButtonContainerCorrect :
-											(review && answersReview[questionCount] === item.id && !item.es_respuesta_correcta) ? styles.radioButtonContainerWrong :
-												styles.radioButtonContainer]}>
+									<View
+										key={index}
+										style={[
+											(review && answersReview[questionCount] === item.id && item.es_respuesta_correcta) || (review && item.es_respuesta_correcta) ? styles.radioButtonContainerCorrect :
+												(review && answersReview[questionCount] === item.id && !item.es_respuesta_correcta) ? styles.radioButtonContainerWrong :
+													styles.radioButtonContainer]}>
 										<View style={{ flexDirection: !item.imagen ? 'column' : 'row', flex: 1 }}>
 											<CheckBox
 												title={item.texto}
@@ -180,10 +231,47 @@ function QuizScreen({ route, navigation }) {
 
 						<AppButton
 							title={questionCount < getQuizApi.data.length - 1 ? "Siguiente" : 'Finalizar'} onPress={getNextQuestion} />
-					</>
+
+					</View>
 				)) || <ContentNotFound title="Cuestionario" />}
-			</Screen>
-		</>
+			</View>
+			<Modal visible={showModal}
+				dismiss={() => {
+					setQuestionCount(0)
+					setAnswersArray(getQuizApi.data[0]?.answers)
+					setReview(true)
+					setShowModal(false)
+				}}
+				botton={'Si'}
+				secondaryBotton={'No'}
+				secondaryBottonOnPress={() => {
+					setShowModal(false)
+					if (route && currentLevel !== topic.nivel_usuario_actual) {
+						return navigation.navigate('Level', curso)
+					} else {
+						if (route) return navigation.goBack()
+					}
+					navigation.reset();
+				}}
+			>
+				<View style={styles.modalContainer}>
+					<AppText style={styles.textModal}>{
+						`Su calificación es ${grade.toString()} ¿Desea hacer una revisión?`
+					}</AppText>
+					{
+						currentLevel !== topic.nivel_usuario_actual &&
+						<>
+							<LottieView
+								source={Congratulation}
+								style={styles.imageLottie}
+								autoPlay
+							/>
+							<AppText style={styles.congratulationText}>¡Felicidades has subido de nivel!</AppText>
+						</>
+					}
+				</View>
+			</Modal>
+		</Screen>
 	);
 }
 
@@ -193,6 +281,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		paddingVertical: 15,
 		paddingHorizontal: 10,
+		marginTop: resize(10)
 	},
 	checkBoxContainer: {
 		backgroundColor: colors.white,
@@ -210,11 +299,10 @@ const styles = StyleSheet.create({
 	questionContainer: {
 		alignItems: "center",
 		backgroundColor: colors.white,
-		marginTop: 20,
-		marginBottom: 15,
 		padding: 10,
 		flex: 1,
-		justifyContent: 'center'
+		justifyContent: 'center',
+		marginBottom: resize(10)
 	},
 	radioButtonContainer: {
 		flexDirection: "row",
@@ -238,6 +326,43 @@ const styles = StyleSheet.create({
 		borderColor: 'green',
 		borderLeftWidth: 10
 	},
+	wildcardContainer: {
+		paddingVertical: 10,
+		paddingHorizontal: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-around'
+	},
+	wildcardText: {
+		color: colors.white,
+		fontSize: resize(12),
+		lineHeight: resize(16),
+		fontWeight: 'bold'
+	},
+	wildcard: {
+		backgroundColor: colors.primary,
+		flex: 0.4,
+		borderRadius: resize(7),
+		alignItems: 'center'
+	},
+	modalContainer: {
+		height: resize(250),
+		backgroundColor: colors.white,
+		justifyContent: 'center'
+	},
+	imageLottie: {
+		height: resize(120),
+		alignSelf: 'center'
+	},
+	congratulationText: {
+		fontSize: resize(20),
+		lineHeight: resize(24),
+		fontWeight: 'bold',
+		textAlign: 'center',
+		marginBottom: resize(30)
+	},
+	textModal: {
+		textAlign: 'center'
+	}
 });
 
 export default QuizScreen;
