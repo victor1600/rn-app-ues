@@ -246,7 +246,7 @@ function QuizScreen({ route, navigation }) {
 				secondaryBotton={'No'}
 				secondaryBottonOnPress={() => {
 					setShowModal(false)
-					if (route && currentLevel !== topic.nivel_usuario_actual) {
+					if (route && currentLevel !== topic?.nivel_usuario_actual) {
 						return navigation.navigate('Level', curso)
 					} else {
 						if (route) return navigation.goBack()
@@ -259,7 +259,7 @@ function QuizScreen({ route, navigation }) {
 						`Su calificación es ${grade.toString()} ¿Desea hacer una revisión?`
 					}</AppText>
 					{
-						currentLevel !== topic.nivel_usuario_actual &&
+						currentLevel !== topic?.nivel_usuario_actual &&
 						<>
 							<LottieView
 								source={Congratulation}

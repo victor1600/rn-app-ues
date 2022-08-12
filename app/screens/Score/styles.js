@@ -108,5 +108,8 @@ export default StyleSheet.create({
 		borderColor: colors.gray,
 		backgroundColor: colors.primary
 	},
+	nameContainer: {
+		flex: 1,
+	}
 
 })

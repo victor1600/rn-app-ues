@@ -52,7 +52,9 @@ const ScoreScreen = () => {
 												<Image source={{ uri: `data:image/png;base64,${item.imagen}` }} style={styles.image} />
 											}
 										</View>
-										<AppText style={styles.name}>{item.first_name} {item.last_name}</AppText>
+										<View style={styles.nameContainer}>
+											<AppText style={styles.name}>{item.first_name} {item.last_name}</AppText>
+										</View>
 									</View>
 									<View style={styles.rightCard}>
 										<AppText>Score</AppText>
