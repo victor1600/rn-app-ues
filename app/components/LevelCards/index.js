@@ -24,7 +24,7 @@ const LevelCard = ({
 		<TouchableOpacity style={[styles.container,
 		{ backgroundColor: disabled ? '#fff' : '#8d2326' },
 		disabled && { borderWidth: 5, borderColor: '#7d7d7d' }]}
-			onPress={() => onPress()}>
+			onPress={() => !disabled ? onPress() : {}}>
 			<View style={styles.imageContainer}>
 				{
 					!disabled &&
