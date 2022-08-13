@@ -61,7 +61,7 @@ function TopicsScreen({ title = "Topics", route, navigation }) {
 								/>
 							)}
 							ListEmptyComponent={() => (
-								<AppText>No topics found for {texto}</AppText>
+								<AppText>No se encontraron temas para {texto}</AppText>
 							)}
 						/>
 						<Modal visible={showModal} dismiss={() => setShowModal(false)} botton={'Aceptar'}>
