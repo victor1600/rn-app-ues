@@ -37,6 +37,8 @@ export const useProfile = () => {
 				imagen: result.base64
 			})
 			profile()
+		} else {
+			setLoading(false)
 		}
 	}
 

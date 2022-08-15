@@ -31,7 +31,6 @@ function LoginScreen(props) {
 		const result = await login.request(username, password);
 		if (!result.ok) return setLoginFailed(true);
 		setLoginFailed(false);
-		console.log(result.data.access);
 		auth.logIn(result.data.access);
 	};
 

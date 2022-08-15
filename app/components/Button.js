@@ -8,7 +8,7 @@ function AppButton({
 	onPress,
 	color = "primary",
 	disabled = false,
-	disabledFunction = () => console.log('no disponible')
+	disabledFunction = () => { }
 }) {
 	return (
 		<TouchableOpacity

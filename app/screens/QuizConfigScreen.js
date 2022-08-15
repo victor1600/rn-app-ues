@@ -34,7 +34,7 @@ function QuizConfigScreen({ route, navigation }) {
 					Las preguntas se mostraran en orden aleatorio. Cada pregunta tiene una
 					sola respuesta correcta.
 					{"\n"}
-					{"\n"}La calificacion se muestra cuando se contesta la ultima
+					{"\n"}La calificación se muestra cuando se contesta la última
 					pregunta.
 				</AppText>
 

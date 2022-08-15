@@ -7,6 +7,7 @@ import colors from "../config/colors";
 import ProfileScreen from "../screens/Profile/index";
 import QuizConfigScreen from "../screens/QuizConfigScreen";
 import ScoreScreen from "../screens/Score";
+import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,7 +18,6 @@ const AppNavigator = () => {
 			screenOptions={({ route }) => ({
 				tabBarIcon: ({ focused, color, size }) => {
 					let iconName;
-
 					if (route.name === "Home") {
 						iconName = "home";
 					} else if (route.name === "Profile") {
@@ -36,6 +36,12 @@ const AppNavigator = () => {
 				headerShown: false,
 				tabBarActiveTintColor: colors.primary,
 				tabBarInactiveTintColor: "gray",
+				tabBarStyle: {
+					display:
+						getFocusedRouteNameFromRoute(route) === "Quiz"
+							? "none"
+							: "flex",
+				},
 			})}
 		>
 			<Tab.Screen name="Home" component={CoursesNavigator} />

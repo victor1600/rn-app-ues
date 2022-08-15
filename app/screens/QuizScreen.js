@@ -82,10 +82,10 @@ function QuizScreen({ route, navigation }) {
 		const rightAnswer = getQuizApi.data[questionCount].answers.find(
 			(e) => e.es_respuesta_correcta
 		);
-		const wrongAnswer = getQuizApi.data[questionCount].answers.find(
+		const wrongAnswer = getQuizApi.data[questionCount].answers.filter(
 			(e) => !e.es_respuesta_correcta
 		);
-		const answers = [rightAnswer, wrongAnswer];
+		const answers = [rightAnswer, ...wrongAnswer.slice(0, wrongAnswer.length - 1)];
 		setAnswersArray(answers);
 	};
 

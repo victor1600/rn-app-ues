@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
 	screen: {
 		paddingTop: Constants.statusBarHeight,
 		flex: 1,
+		backgroundColor: "#f1f1f2",
 	},
 	view: {
 		flex: 1,
