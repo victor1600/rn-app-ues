@@ -36,7 +36,7 @@ function TopicsScreen({ title = "Topics", route, navigation }) {
 				getRulesApi.loading ?
 					<ActivityIndicator visible={getRulesApi.loading} />
 					:
-					<>
+					<View style={{ height: '100%' }}>
 						<View style={styles.text_container}>
 							<AppText style={styles.title}>{texto}</AppText>
 							<TouchableOpacity style={styles.icon} onPress={() => {
@@ -64,11 +64,12 @@ function TopicsScreen({ title = "Topics", route, navigation }) {
 								<AppText>No se encontraron temas para {texto}</AppText>
 							)}
 						/>
-						<Modal visible={showModal} dismiss={() => setShowModal(false)} botton={'Aceptar'}>
-							<Swipper items={rulesData} />
-						</Modal>
-					</>
+					</View>
 			}
+			<Modal visible={showModal} dismiss={() => setShowModal(false)} botton={'Aceptar'}>
+				<Swipper items={rulesData} />
+			</Modal>
+
 		</Screen>
 	);
 }

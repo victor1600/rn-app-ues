@@ -60,7 +60,7 @@ export default StyleSheet.create({
 	course: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'space-evenly'
+		paddingLeft: resize(10)
 	},
 	editIcon: {
 		height: resize(30),

@@ -51,12 +51,13 @@ export const ProfileScreen = () => {
 									return (
 										<View style={styles.column} key={index}>
 											<View style={styles.row}>
+												<MaterialCommunityIcons
+													color={'#000'}
+													name={'school'}
+													size={20}
+												/>
 												<View style={styles.course}>
-													<MaterialCommunityIcons
-														color={'#000'}
-														name={'school'}
-														size={20}
-													/>
+
 													<AppText>{e.course}</AppText>
 												</View>
 												<View style={styles.grade}>

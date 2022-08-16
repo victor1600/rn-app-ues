@@ -7,13 +7,15 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import styles from "./styles";
 import stylesText from '../../components/Text/styles'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 
 const ScoreScreen = () => {
 	const { loading, score, getScore } = useScore()
+	const isFocused = useIsFocused();
 
 	useEffect(() => {
 		getScore()
-	}, [])
+	}, [isFocused === true])
 
 	return (
 		<Screen
