@@ -41,7 +41,7 @@ export const ProfileScreen = () => {
 							</View>
 						</View>
 						<AppText style={stylesText.title}>{profile.first_name} {profile.last_name}</AppText>
-						<AppText style={stylesText.subTitle}>Score: {profile.score}</AppText>
+						<AppText style={stylesText.subTitle}>Score: {profile.score.toFixed(2)}</AppText>
 						<View style={styles.headerContainer}>
 							<AppText style={styles.title}>Mis Cursos</AppText>
 						</View>

@@ -60,7 +60,7 @@ const ScoreScreen = () => {
 									</View>
 									<View style={styles.rightCard}>
 										<AppText>Score</AppText>
-										<AppText style={stylesText.subTitle}>{String(item.score)}</AppText>
+										<AppText style={stylesText.subTitle}>{String(item.score.toFixed(2))}</AppText>
 									</View>
 								</View>
 							)
@@ -83,7 +83,7 @@ const ScoreScreen = () => {
 									</View>
 									<View style={styles.rightCard}>
 										<AppText style={{ color: '#fff' }}>Score</AppText>
-										<AppText style={[stylesText.subTitle, { color: '#fff' }]}>{String(score.me.score)}</AppText>
+										<AppText style={[stylesText.subTitle, { color: '#fff' }]}>{String(score.me.score.toFixed(2))}</AppText>
 									</View>
 								</View>
 							</View>

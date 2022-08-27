@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import {
 	View,
 	StyleSheet,
-	FlatList,
 	Linking,
 	Alert,
 	TouchableOpacity,
 	Image,
+	KeyboardAvoidingView
 } from 'react-native';
 import Screen from './Screen';
 import colors from '../config/colors';
@@ -15,7 +15,6 @@ import { useState } from 'react';
 import useApi from '../hooks/useApi';
 import AppText from '../components/Text';
 import AppButton from '../components/Button';
-import { CheckBox } from 'react-native-elements';
 import ActivityIndicator from '../components/ActivityIndicator';
 import ContentNotFound from '../components/ContentNotFound';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -24,8 +23,10 @@ import Modal from '../components/Modal';
 import LottieView from 'lottie-react-native';
 import Congratulation from '../assets/animations/Congratulation.json';
 import getCurrentLevel from '../api/topics';
-
+import OptionsMultiple from '../components/Questions/Options_multiple/index'
+import ComplementaryAnswer from '../components/Questions/Complementary_answer'
 let answers = [];
+let questions = [];
 
 function QuizScreen({ route, navigation }) {
 	const { topic, curso, number } = route.params;
@@ -43,6 +44,8 @@ function QuizScreen({ route, navigation }) {
 	const [showModal, setShowModal] = useState(false);
 	const [grade, setGrade] = useState(0);
 	const [currentLevel, setCurrentLevel] = useState(null);
+	const [text, onChangeText] = useState('')
+	const [answersForReview, setAnswersForReview] = useState([])
 
 	useEffect(() => {
 		if (topic) {
@@ -74,7 +77,11 @@ function QuizScreen({ route, navigation }) {
 		const rightAnswer = getQuizApi.data[questionCount].answers.find(
 			(e) => e.es_respuesta_correcta
 		);
-		getNextQuestion(rightAnswer.id);
+		if (getQuizApi.data[questionCount].tipo === 'Complementar') {
+			getNextQuestion(rightAnswer, rightAnswer.texto);
+		} else {
+			getNextQuestion(rightAnswer);
+		}
 	};
 
 	const deleteAnswersMethod = () => {
@@ -89,17 +96,24 @@ function QuizScreen({ route, navigation }) {
 		setAnswersArray(answers);
 	};
 
-	const getNextQuestion = async (answer = checked) => {
-		if (!answer && !review) {
-			Alert.alert('Error', 'Por favor selecciona una respuesta.', {
+	const getNextQuestion = async (answer = checked, isComplementary = null) => {
+		if (!answer && text.trim() === '' && !review) {
+			Alert.alert('Error', 'Debes seleccionar una opción o responder a la pregunta para continuar.', {
 				cancellable: false,
 			});
 			return;
 		}
 		if (!review) {
-			answers.push(answer);
+			if (text !== '' || isComplementary) {
+				answers.push(text || isComplementary)
+				questions.push(getQuizApi.data[questionCount].id)
+			} else {
+				answers.push(answer.id)
+				questions.push(answer.pregunta)
+			}
 		}
 		setChecked('');
+		onChangeText('')
 		if (questionCount < getQuizApi.data.length - 1) {
 			setQuestionCount(questionCount + 1);
 			setAnswersArray(getQuizApi.data[questionCount + 1].answers);
@@ -110,10 +124,15 @@ function QuizScreen({ route, navigation }) {
 			navigation.reset();
 			return;
 		}
-		const result = await gradeQuizApi.request({ answers });
+		const answersRequest = {
+			questions,
+			answers
+		}
+		setAnswersForReview(answers)
+		const result = await gradeQuizApi.request(answersRequest);
 		setAnswersReview(answers);
 		answers = [];
-
+		questions = []
 		if (!result.ok) {
 			if (result.data) setError(result.data.error);
 			else {
@@ -155,11 +174,12 @@ function QuizScreen({ route, navigation }) {
 									</TouchableOpacity>
 								</>
 							)}
+							<AppText style={styles.textNivel}>Nivel: {getQuizApi.data[questionCount].nivel}</AppText>
+
 						</View>
 						{(skipQuestion || deleteAnswers) &&
 							!review &&
-							answersArray &&
-							answersArray.length > 2 && (
+							answersArray && (
 								<View style={styles.wildcardContainer}>
 									{skipQuestion && (
 										<TouchableOpacity
@@ -176,128 +196,54 @@ function QuizScreen({ route, navigation }) {
 											</AppText>
 										</TouchableOpacity>
 									)}
-									{deleteAnswers && (
-										<TouchableOpacity
-											style={[styles.wildcardContainer, styles.wildcard]}
-											onPress={() => deleteAnswersMethod()}
-										>
-											<MaterialCommunityIcons
-												color={'#fff'}
-												name={'sticker-remove-outline'}
-												size={25}
-											/>
-											<AppText
-												style={styles.wildcardText}
-											>{`Eliminar 1\nrespuesta\nincorrecta`}</AppText>
-										</TouchableOpacity>
-									)}
+									{deleteAnswers &&
+										answersArray.length > 2 && (
+											<TouchableOpacity
+												style={[styles.wildcardContainer, styles.wildcard]}
+												onPress={() => deleteAnswersMethod()}
+											>
+												<MaterialCommunityIcons
+													color={'#fff'}
+													name={'sticker-remove-outline'}
+													size={25}
+												/>
+												<AppText
+													style={styles.wildcardText}
+												>{`Eliminar 1\nrespuesta\nincorrecta`}</AppText>
+											</TouchableOpacity>
+										)}
 								</View>
 							)}
-						<View style={styles.answerContainer}>
-							{review && <AppText>La respuesta correcta es:</AppText>}
-							<FlatList
-								data={answersArray}
-								renderItem={({ item, index }) => (
-									<View
-										key={index}
-										style={[
-											(review &&
-												answersReview[questionCount] === item.id &&
-												item.es_respuesta_correcta) ||
-												(review && item.es_respuesta_correcta)
-												? styles.radioButtonContainerCorrect
-												: review &&
-													answersReview[questionCount] === item.id &&
-													!item.es_respuesta_correcta
-													? styles.radioButtonContainerWrong
-													: styles.radioButtonContainer,
-										]}
-									>
-										<View
-											style={{
-												flexDirection: !item.imagen ? 'column' : 'row',
-												flex: 1,
-											}}
-										>
-											<CheckBox
-												title={item.texto}
-												checkedIcon="dot-circle-o"
-												uncheckedIcon="circle-o"
-												checkedColor={colors.primary}
-												containerStyle={styles.checkBoxContainer}
-												checked={
-													review
-														? answersReview[questionCount] === item.id
-															? true
-															: false
-														: checked === item.id
-															? true
-															: false
-												}
-												onPress={() => (review ? {} : setChecked(item.id))}
-											/>
-											{item.imagen && (
-												<TouchableOpacity
-													onPress={() => (review ? {} : setChecked(item.id))}
-													style={{ height: resize(100), width: resize(250) }}
-												>
-													<Image
-														source={{ uri: item.imagen }}
-														style={{ flex: 1 }}
-														resizeMode={'contain'}
-													/>
-												</TouchableOpacity>
-											)}
-										</View>
-										{((review &&
-											answersReview[questionCount] === item.id &&
-											item.es_respuesta_correcta) ||
-											(review && item.es_respuesta_correcta)) && (
-												<View
-													style={{
-														flex: 0.1,
-														flexDirection: 'column',
-														justifyContent: 'center',
-													}}
-												>
-													<MaterialCommunityIcons
-														color={'green'}
-														name={'check-circle'}
-														size={25}
-													/>
-												</View>
-											)}
-										{review &&
-											answersReview[questionCount] === item.id &&
-											!item.es_respuesta_correcta && (
-												<View
-													style={{
-														flex: 0.1,
-														flexDirection: 'column',
-														justifyContent: 'center',
-													}}
-												>
-													<MaterialCommunityIcons
-														color={'red'}
-														name={'close-circle'}
-														size={25}
-													/>
-												</View>
-											)}
-									</View>
-								)}
-								showsVerticalScrollIndicator={false}
-							/>
-						</View>
-
-						<AppButton
-							title={
-								questionCount < getQuizApi.data.length - 1
-									? 'Siguiente'
-									: 'Finalizar'
+						<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }} keyboardVerticalOffset={100}>
+							{
+								getQuizApi.data[questionCount].tipo === 'Complementar' ?
+									<ComplementaryAnswer
+										review={review}
+										question={getQuizApi.data[questionCount]}
+										answer={answersForReview[questionCount]}
+										text={text}
+										onChangeText={(value) => onChangeText(value)}
+									/>
+									:
+									<OptionsMultiple
+										review={review}
+										answersArray={answersArray}
+										answersReview={answersReview}
+										setChecked={(value) => { setChecked(value) }}
+										checked={checked.id}
+										questionCount={questionCount}
+									/>
 							}
-							onPress={getNextQuestion}
-						/>
+
+							<AppButton
+								title={
+									questionCount < getQuizApi.data.length - 1
+										? 'Siguiente'
+										: 'Finalizar'
+								}
+								onPress={getNextQuestion}
+							/>
+						</KeyboardAvoidingView>
 					</View>
 				)) || <ContentNotFound title="Cuestionario" />}
 			</View>
@@ -344,13 +290,6 @@ function QuizScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-	answerContainer: {
-		backgroundColor: colors.white,
-		flex: 1,
-		paddingVertical: 15,
-		paddingHorizontal: 10,
-		marginTop: resize(10),
-	},
 	checkBoxContainer: {
 		backgroundColor: colors.white,
 		borderWidth: 0,
@@ -365,33 +304,11 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 	},
 	questionContainer: {
-		alignItems: 'center',
 		backgroundColor: colors.white,
 		padding: 10,
 		flex: 1,
-		justifyContent: 'center',
+		justifyContent: 'space-around',
 		marginBottom: resize(10),
-	},
-	radioButtonContainer: {
-		flexDirection: 'row',
-		marginBottom: 10,
-		justifyContent: 'flex-start',
-	},
-	radioButtonContainerWrong: {
-		flexDirection: 'row',
-		marginBottom: 10,
-		justifyContent: 'flex-start',
-		borderWidth: 1,
-		borderColor: 'red',
-		borderLeftWidth: 10,
-	},
-	radioButtonContainerCorrect: {
-		flexDirection: 'row',
-		marginBottom: 10,
-		justifyContent: 'flex-start',
-		borderWidth: 1,
-		borderColor: 'green',
-		borderLeftWidth: 10,
 	},
 	wildcardContainer: {
 		paddingVertical: 10,
@@ -430,6 +347,11 @@ const styles = StyleSheet.create({
 	textModal: {
 		textAlign: 'center',
 	},
+	textNivel: {
+		fontSize: resize(10),
+		fontStyle: 'italic',
+		textAlign: 'left'
+	}
 });
 
 export default QuizScreen;
