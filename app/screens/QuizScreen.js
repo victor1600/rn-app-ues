@@ -29,7 +29,7 @@ let answers = [];
 let questions = [];
 
 function QuizScreen({ route, navigation }) {
-	const { topic, curso, number } = route.params;
+	const { topic, curso, number, userLevel } = route.params;
 	const getQuizApi = useApi(quizApi.getQuiz);
 	const getCurrentLevelApi = useApi(getCurrentLevel.getCurrentLevel);
 	const gradeQuizApi = useApi(quizApi.gradeQuiz);
@@ -259,7 +259,7 @@ function QuizScreen({ route, navigation }) {
 				secondaryBotton={'No'}
 				secondaryBottonOnPress={() => {
 					setShowModal(false);
-					if (route && currentLevel !== topic?.nivel_usuario_actual) {
+					if (route && currentLevel !== userLevel) {
 						return navigation.navigate('Level', curso);
 					} else {
 						if (route) return navigation.goBack();
@@ -271,7 +271,7 @@ function QuizScreen({ route, navigation }) {
 					<AppText
 						style={styles.textModal}
 					>{`Su calificación es ${grade.toString()} ¿Desea hacer una revisión?`}</AppText>
-					{currentLevel !== topic?.nivel_usuario_actual && (
+					{currentLevel !== userLevel && (
 						<>
 							<LottieView
 								source={Congratulation}

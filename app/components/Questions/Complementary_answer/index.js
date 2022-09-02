@@ -25,7 +25,7 @@ const ComplementaryAnswer = ({
 			setWrong(!isWrong)
 		}
 		setRightAnwers(answers)
-	}, [])
+	}, [answer])
 
 	return (
 		<View style={styles.answerContainer}>

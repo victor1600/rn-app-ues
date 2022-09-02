@@ -51,7 +51,7 @@ function LoginScreen(props) {
 							icon="email"
 							// keyboardType="email-address"
 							name="username"
-							placeholder="username"
+							placeholder="Username"
 						// textContentType="emailAddress"
 						/>
 						<ErrorMessage

@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList, View } from "react-native";
 import ListItem from "../components/lists/ListItem";
 import ListItemSeparator from "../components/lists/ListItemSeparator";
 import AppText from "../components/Text";
 import routes from "../navigation/routes";
 import Screen from "./Screen";
+import getCurrentLevel from '../api/topics';
+import { useIsFocused } from "@react-navigation/native";
+import useApi from '../hooks/useApi';
 
 const options = [
 	{
@@ -20,8 +23,25 @@ const options = [
 ];
 
 function SubMenuTopicsScreen({ navigation, route }) {
+	const getCurrentLevelApi = useApi(getCurrentLevel.getCurrentLevel);
 	const { item, curso } = route.params;
 	const topic = item
+	const [currentLevel, setCurrentLevel] = useState(null);
+	const isFocused = useIsFocused();
+
+	useEffect(() => {
+		if (getCurrentLevelApi.data) {
+			setCurrentLevel(getCurrentLevelApi.data.current_level);
+		}
+	}, [getCurrentLevelApi.data]);
+
+	useEffect(() => {
+		if (topic) {
+			getCurrentLevelApi.request(topic.id);
+		}
+	}, [isFocused === true])
+
+
 	return (
 		<Screen>
 			<View style={styles.text_container}>
@@ -36,7 +56,7 @@ function SubMenuTopicsScreen({ navigation, route }) {
 					<ListItem
 						text={item.text}
 						icon="chevron-right"
-						onPress={() => navigation.navigate(item.route, { topic: topic, curso: curso })}
+						onPress={() => navigation.navigate(item.route, { topic: topic, curso: curso, userLevel: currentLevel })}
 					/>
 				)}
 				ItemSeparatorComponent={ListItemSeparator}
